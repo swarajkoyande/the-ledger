@@ -10,13 +10,15 @@ function useForm(init: FV) {
   return { values: v, onChange }
 }
 
-const inp = [
-  'w-full text-sm font-light text-cream placeholder-stone/50 rounded-xl px-4 py-3.5',
-  'bg-cream/4 border border-cream/8 focus:outline-none focus:border-orange/50 focus:bg-cream/6',
-  'transition-all duration-200',
-].join(' ')
+const inp = 'w-full text-sm font-light rounded-xl px-4 py-3.5 focus:outline-none transition-all duration-200'
+const inpStyle = { background: '#FAF8F3', border: '1px solid rgba(26,21,16,0.12)', color: '#1A1510' }
+const inpFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+  Object.assign(e.target.style, { borderColor: 'rgba(249,115,22,0.5)' })
+const inpBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+  Object.assign(e.target.style, { borderColor: 'rgba(26,21,16,0.12)' })
 
-const lbl = 'block text-stone text-[11px] font-medium uppercase tracking-[0.15em] mb-2'
+const lbl = 'block text-[11px] font-medium uppercase tracking-[0.15em] mb-2'
+const lblStyle = { color: '#7A6B58' }
 
 const regions = ['Tokyo, Japan', 'Singapore', 'Gold Coast, Australia', 'Madrid, Spain', 'Delhi, India', 'Tamil Nadu, India', 'Gujarat, India', 'Other']
 
@@ -74,20 +76,22 @@ export default function RegisterPage() {
         </div>
       </FadeIn>
 
-      {/* ── FORMS ─────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24" style={{ background: '#0E0C09' }}>
+      {/* ── FORMS — LIGHT ─────────────────────────────────────────────────── */}
+      <section className="py-16 sm:py-24" style={{ background: '#FAF8F3' }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-6">
 
           {/* Register Your Club */}
           <FadeIn delay={0} direction="left">
-            <div className="glass rounded-3xl overflow-hidden h-full" style={{ boxShadow: '0 0 60px rgba(249,115,22,0.04)' }}>
-              <div className="p-7 flex items-start gap-4" style={{ borderBottom: '1px solid rgba(245,240,232,0.06)' }}>
-                <div className="w-11 h-11 rounded-xl glass-orange flex items-center justify-center flex-shrink-0">
+            <div className="rounded-3xl overflow-hidden h-full"
+              style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.08)', boxShadow: '0 8px 40px rgba(14,12,9,0.07)' }}>
+              <div className="p-7 flex items-start gap-4" style={{ borderBottom: '1px solid rgba(26,21,16,0.07)' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(249,115,22,0.10)', border: '1px solid rgba(249,115,22,0.20)' }}>
                   <Building2 size={18} className="text-orange" />
                 </div>
                 <div>
-                  <h2 className="text-cream text-xl font-bold">Register Your Club</h2>
-                  <p className="text-stone text-sm font-light mt-0.5">Bring The Ledger to your school or university.</p>
+                  <h2 className="text-xl font-bold" style={{ color: '#1A1510' }}>Register Your Club</h2>
+                  <p className="text-sm font-light mt-0.5" style={{ color: '#7A6B58' }}>Bring The Ledger to your school or university.</p>
                 </div>
               </div>
               <div className="p-7">
@@ -97,35 +101,35 @@ export default function RegisterPage() {
                   <form onSubmit={e => { e.preventDefault(); setClubDone(true) }} className="space-y-4">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className={lbl}>Club Name *</label>
-                        <input type="text" name="clubName" required value={club.values.clubName} onChange={club.onChange} placeholder="Finance Club" className={inp} />
+                        <label className={lbl} style={lblStyle}>Club Name *</label>
+                        <input type="text" name="clubName" required value={club.values.clubName} onChange={club.onChange} placeholder="Finance Club" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                       </div>
                       <div>
-                        <label className={lbl}>School / University *</label>
-                        <input type="text" name="schoolName" required value={club.values.schoolName} onChange={club.onChange} placeholder="Your institution" className={inp} />
+                        <label className={lbl} style={lblStyle}>School / University *</label>
+                        <input type="text" name="schoolName" required value={club.values.schoolName} onChange={club.onChange} placeholder="Your institution" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                       </div>
                     </div>
                     <div>
-                      <label className={lbl}>Your Name *</label>
-                      <input type="text" name="contactName" required value={club.values.contactName} onChange={club.onChange} placeholder="Full name" className={inp} />
+                      <label className={lbl} style={lblStyle}>Your Name *</label>
+                      <input type="text" name="contactName" required value={club.values.contactName} onChange={club.onChange} placeholder="Full name" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <div>
-                      <label className={lbl}>Email Address *</label>
-                      <input type="email" name="email" required value={club.values.email} onChange={club.onChange} placeholder="you@school.edu" className={inp} />
+                      <label className={lbl} style={lblStyle}>Email Address *</label>
+                      <input type="email" name="email" required value={club.values.email} onChange={club.onChange} placeholder="you@school.edu" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className={lbl}>Country *</label>
-                        <input type="text" name="country" required value={club.values.country} onChange={club.onChange} placeholder="Japan" className={inp} />
+                        <label className={lbl} style={lblStyle}>Country *</label>
+                        <input type="text" name="country" required value={club.values.country} onChange={club.onChange} placeholder="Japan" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                       </div>
                       <div>
-                        <label className={lbl}>Approx. Members</label>
-                        <input type="number" name="members" min="1" value={club.values.members} onChange={club.onChange} placeholder="15" className={inp} />
+                        <label className={lbl} style={lblStyle}>Approx. Members</label>
+                        <input type="number" name="members" min="1" value={club.values.members} onChange={club.onChange} placeholder="15" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                       </div>
                     </div>
                     <div>
-                      <label className={lbl}>Tell us about your club</label>
-                      <textarea name="about" rows={3} value={club.values.about} onChange={club.onChange} placeholder="Activities, focus areas, past events…" className={`${inp} resize-none`} />
+                      <label className={lbl} style={lblStyle}>Tell us about your club</label>
+                      <textarea name="about" rows={3} value={club.values.about} onChange={club.onChange} placeholder="Activities, focus areas, past events…" className={`${inp} resize-none`} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <button type="submit" className="w-full btn-primary py-4 text-base mt-2">
                       Register Your Club <ArrowRight size={16} />
@@ -138,14 +142,16 @@ export default function RegisterPage() {
 
           {/* Apply as Regional Head */}
           <FadeIn delay={100} direction="right">
-            <div className="glass rounded-3xl overflow-hidden h-full">
-              <div className="p-7 flex items-start gap-4" style={{ borderBottom: '1px solid rgba(245,240,232,0.06)' }}>
-                <div className="w-11 h-11 rounded-xl glass flex items-center justify-center flex-shrink-0">
-                  <Globe2 size={18} className="text-stone" />
+            <div className="rounded-3xl overflow-hidden h-full"
+              style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.08)', boxShadow: '0 8px 40px rgba(14,12,9,0.07)' }}>
+              <div className="p-7 flex items-start gap-4" style={{ borderBottom: '1px solid rgba(26,21,16,0.07)' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: '#FAF8F3', border: '1px solid rgba(26,21,16,0.10)' }}>
+                  <Globe2 size={18} style={{ color: '#9B8B75' }} />
                 </div>
                 <div>
-                  <h2 className="text-cream text-xl font-bold">Apply as Regional Head</h2>
-                  <p className="text-stone text-sm font-light mt-0.5">Lead The Ledger's expansion in your region.</p>
+                  <h2 className="text-xl font-bold" style={{ color: '#1A1510' }}>Apply as Regional Head</h2>
+                  <p className="text-sm font-light mt-0.5" style={{ color: '#7A6B58' }}>Lead The Ledger's expansion in your region.</p>
                 </div>
               </div>
               <div className="p-7">
@@ -154,31 +160,31 @@ export default function RegisterPage() {
                 ) : (
                   <form onSubmit={e => { e.preventDefault(); setHeadDone(true) }} className="space-y-4">
                     <div>
-                      <label className={lbl}>Full Name *</label>
-                      <input type="text" name="fullName" required value={head.values.fullName} onChange={head.onChange} placeholder="Your full name" className={inp} />
+                      <label className={lbl} style={lblStyle}>Full Name *</label>
+                      <input type="text" name="fullName" required value={head.values.fullName} onChange={head.onChange} placeholder="Your full name" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <div>
-                      <label className={lbl}>Email Address *</label>
-                      <input type="email" name="email" required value={head.values.email} onChange={head.onChange} placeholder="you@email.com" className={inp} />
+                      <label className={lbl} style={lblStyle}>Email Address *</label>
+                      <input type="email" name="email" required value={head.values.email} onChange={head.onChange} placeholder="you@email.com" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <div>
-                      <label className={lbl}>Region You Want to Lead *</label>
-                      <select name="region" required value={head.values.region} onChange={head.onChange} className={`${inp} cursor-pointer appearance-none`}>
+                      <label className={lbl} style={lblStyle}>Region You Want to Lead *</label>
+                      <select name="region" required value={head.values.region} onChange={head.onChange} className={`${inp} cursor-pointer appearance-none`} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur}>
                         <option value="">Select a region…</option>
                         {regions.map(r => <option key={r} value={r}>{r}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className={lbl}>Current School / University *</label>
-                      <input type="text" name="school" required value={head.values.school} onChange={head.onChange} placeholder="Your institution" className={inp} />
+                      <label className={lbl} style={lblStyle}>Current School / University *</label>
+                      <input type="text" name="school" required value={head.values.school} onChange={head.onChange} placeholder="Your institution" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <div>
-                      <label className={lbl}>Finance / Leadership Background</label>
-                      <textarea name="background" rows={2} value={head.values.background} onChange={head.onChange} placeholder="Clubs, competitions, coursework, work experience…" className={`${inp} resize-none`} />
+                      <label className={lbl} style={lblStyle}>Finance / Leadership Background</label>
+                      <textarea name="background" rows={2} value={head.values.background} onChange={head.onChange} placeholder="Clubs, competitions, coursework, work experience…" className={`${inp} resize-none`} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <div>
-                      <label className={lbl}>Why do you want to be a Regional Head? *</label>
-                      <textarea name="motivation" rows={3} required value={head.values.motivation} onChange={head.onChange} placeholder="Your vision for growing The Ledger in your region…" className={`${inp} resize-none`} />
+                      <label className={lbl} style={lblStyle}>Why do you want to be a Regional Head? *</label>
+                      <textarea name="motivation" rows={3} required value={head.values.motivation} onChange={head.onChange} placeholder="Your vision for growing The Ledger in your region…" className={`${inp} resize-none`} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
                     <button type="submit" className="w-full btn-ghost py-4 text-base mt-2 border-cream/15 hover:border-orange/40 hover:text-orange">
                       Submit Application <ArrowRight size={16} />

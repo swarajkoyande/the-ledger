@@ -50,20 +50,21 @@ export default function ChaptersPage() {
         </FadeIn>
       </section>
 
-      {/* ── CHAPTER CARDS ─────────────────────────────────────────────────── */}
-      <section className="py-16 pb-28" style={{ background: '#0E0C09' }}>
+      {/* ── CHAPTER CARDS — LIGHT ─────────────────────────────────────────── */}
+      <section className="py-16 pb-28" style={{ background: '#FAF8F3' }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 space-y-5">
           {chapters.map((ch, i) => (
             <FadeIn key={ch.city} delay={i * 80} direction="up">
-              <div className="glass rounded-3xl overflow-hidden card-hover">
+              <div className="rounded-3xl overflow-hidden card-hover-light"
+                style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.08)', boxShadow: '0 4px 24px rgba(14,12,9,0.06)' }}>
                 <div className="grid md:grid-cols-[260px_1fr]">
                   {/* Left panel */}
                   <div className="p-8 flex flex-col justify-between gap-6"
-                    style={{ borderRight: '1px solid rgba(245,240,232,0.06)' }}>
+                    style={{ borderRight: '1px solid rgba(26,21,16,0.06)', background: '#FAF8F3' }}>
                     <div>
                       <div className="text-5xl mb-4">{ch.flag}</div>
-                      <h2 className="text-3xl font-black text-cream mb-1">{ch.city}</h2>
-                      <div className="flex items-center gap-1.5 text-stone text-xs font-light mb-4">
+                      <h2 className="text-3xl font-black mb-1" style={{ color: '#1A1510' }}>{ch.city}</h2>
+                      <div className="flex items-center gap-1.5 text-xs font-light mb-4" style={{ color: '#7A6B58' }}>
                         <MapPin size={11} />{ch.country}
                       </div>
                       <span className="inline-flex text-[11px] font-semibold px-3 py-1 rounded-full" style={ch.tagStyle}>
@@ -72,16 +73,17 @@ export default function ChaptersPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       {ch.stats.map(s => (
-                        <div key={s.l} className="glass rounded-xl p-3 text-center">
+                        <div key={s.l} className="rounded-xl p-3 text-center"
+                          style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.07)' }}>
                           <div className="text-orange font-black text-xl">{s.v}</div>
-                          <div className="text-stone text-[11px] font-light mt-0.5">{s.l}</div>
+                          <div className="text-[11px] font-light mt-0.5" style={{ color: '#7A6B58' }}>{s.l}</div>
                         </div>
                       ))}
                     </div>
                   </div>
                   {/* Right panel */}
                   <div className="p-8 md:p-10 flex items-center">
-                    <p className="text-stone font-light text-lg leading-relaxed">{ch.desc}</p>
+                    <p className="font-light text-lg leading-relaxed" style={{ color: '#5C4E3F' }}>{ch.desc}</p>
                   </div>
                 </div>
               </div>

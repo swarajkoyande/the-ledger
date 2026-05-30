@@ -105,8 +105,8 @@ export default function AppPage() {
         </div>
       </section>
 
-      {/* ── CAPABILITIES ──────────────────────────────────────────────────── */}
-      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#0E0C09' }}>
+      {/* ── CAPABILITIES — LIGHT ──────────────────────────────────────────── */}
+      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#FAF8F3' }}>
         <div className="absolute left-1/3 top-0 w-80 h-80 rounded-full bg-orange/5 blur-[100px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <FadeIn className="text-center mb-16">
@@ -118,20 +118,22 @@ export default function AppPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {capabilities.map((c, i) => (
               <FadeIn key={c.title} delay={i * 60} direction="up">
-                <div className="glass rounded-2xl p-7 card-hover h-full">
+                <div className="rounded-2xl p-7 card-hover-light h-full"
+                  style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.08)', boxShadow: '0 4px 20px rgba(14,12,9,0.05)' }}>
                   <div className="text-3xl mb-4">{c.icon}</div>
-                  <h4 className="text-cream font-semibold mb-2">{c.title}</h4>
-                  <p className="text-stone text-sm font-light leading-relaxed">{c.desc}</p>
+                  <h4 className="font-semibold mb-2" style={{ color: '#1A1510' }}>{c.title}</h4>
+                  <p className="text-sm font-light leading-relaxed" style={{ color: '#7A6B58' }}>{c.desc}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
           <FadeIn delay={400} className="mt-10">
-            <div className="glass-orange rounded-2xl p-7 flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div className="rounded-2xl p-7 flex flex-col sm:flex-row items-center justify-between gap-5"
+              style={{ background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.20)' }}>
               <div>
-                <h4 className="text-cream font-semibold mb-1">Available on the web, right now.</h4>
-                <p className="text-stone text-sm font-light">No download required. Open your browser and start.</p>
+                <h4 className="font-semibold mb-1" style={{ color: '#1A1510' }}>Available on the web, right now.</h4>
+                <p className="text-sm font-light" style={{ color: '#7A6B58' }}>No download required. Open your browser and start.</p>
               </div>
               <a href="https://app.theledger.online" target="_blank" rel="noopener noreferrer"
                 className="btn-primary flex-shrink-0 px-7 py-3.5">

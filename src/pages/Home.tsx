@@ -244,26 +244,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── WHAT IS THE LEDGER ────────────────────────────────────────────── */}
-      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#0E0C09' }}>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-tan/5 blur-[120px] pointer-events-none" />
+      {/* ── WHAT IS THE LEDGER — LIGHT ────────────────────────────────── */}
+      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#FAF8F3' }}>
+        <div className="absolute right-0 top-0 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'rgba(249,115,22,0.05)', filter: 'blur(120px)' }} />
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             <FadeIn direction="left">
-              <p className="text-tan text-[11px] font-semibold uppercase tracking-[0.2em] mb-4">What We Are</p>
-              <h2 className="text-[clamp(2.2rem,4vw,3.5rem)] font-black leading-tight mb-6 text-cream">
-                Finance education is broken.<br />
-                <span className="font-light text-stone">We built the fix.</span>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-4" style={{ color: '#F97316' }}>What We Are</p>
+              <h2 className="text-[clamp(2.2rem,4vw,3.5rem)] font-black leading-tight mb-6" style={{ color: '#1A1510' }}>
+                Finance education is broken.
+                <span className="block font-light" style={{ color: '#7A6B58' }}>We built the fix.</span>
               </h2>
-              <p className="text-stone text-lg font-light leading-relaxed mb-6">
+              <p className="text-lg font-light leading-relaxed mb-6" style={{ color: '#7A6B58' }}>
                 Most finance clubs are passive — weekly readings, theoretical discussions, no stakes. The Ledger is different. We're a global network where ambition meets application: real trading simulations, live competitions, and annual summits with industry professionals.
               </p>
-              <p className="text-stone font-light leading-relaxed">
+              <p className="font-light leading-relaxed" style={{ color: '#7A6B58' }}>
                 From Tokyo to Gold Coast, our chapters are building a generation that doesn't just study markets — they move in them.
               </p>
             </FadeIn>
 
-            {/* Glass bento feature cards */}
             <FadeIn direction="right">
               <div className="grid grid-cols-2 gap-4">
                 {[
@@ -272,12 +271,16 @@ export default function Home() {
                   { icon: '🎓', label: 'Learn by Doing', sub: 'Structured content that leads directly to competition.' },
                   { icon: '🏔', label: 'Invite-Only Summits', sub: 'Annual gatherings with industry professionals worldwide.' },
                 ].map((f, i) => (
-                  <div key={f.label}
-                    className="glass rounded-2xl p-6 card-hover"
-                    style={{ transitionDelay: `${i * 60}ms` }}>
+                  <div key={f.label} className="rounded-2xl p-6 card-hover-light"
+                    style={{
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(26,21,16,0.08)',
+                      boxShadow: '0 4px 20px rgba(14,12,9,0.05)',
+                      transitionDelay: `${i * 60}ms`,
+                    }}>
                     <div className="text-3xl mb-3">{f.icon}</div>
-                    <h4 className="text-cream text-sm font-semibold mb-1.5">{f.label}</h4>
-                    <p className="text-stone text-xs font-light leading-relaxed">{f.sub}</p>
+                    <h4 className="text-sm font-semibold mb-1.5" style={{ color: '#1A1510' }}>{f.label}</h4>
+                    <p className="text-xs font-light leading-relaxed" style={{ color: '#7A6B58' }}>{f.sub}</p>
                   </div>
                 ))}
               </div>
@@ -392,18 +395,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOR CLUB LEADERS ──────────────────────────────────────────────── */}
-      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#0E0C09' }}>
-        <div className="absolute left-0 bottom-0 w-[600px] h-[400px] rounded-full bg-orange/4 blur-[120px] pointer-events-none" />
+      {/* ── FOR CLUB LEADERS — LIGHT ──────────────────────────────────── */}
+      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#F2EDE5' }}>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'rgba(196,168,130,0.12)', filter: 'blur(120px)' }} />
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
           <div className="grid lg:grid-cols-2 gap-20 items-start">
             <FadeIn direction="left">
-              <p className="text-tan text-[11px] font-semibold uppercase tracking-[0.2em] mb-4">For Club Leaders</p>
-              <h2 className="text-[clamp(2.2rem,4vw,3.5rem)] font-black leading-tight mb-6 text-cream">
-                Your club deserves<br />
-                <span className="gradient-text">a global stage.</span>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-4" style={{ color: '#F97316' }}>For Club Leaders</p>
+              <h2 className="text-[clamp(2.2rem,4vw,3.5rem)] font-black leading-tight mb-6" style={{ color: '#1A1510' }}>
+                Your club deserves
+                <span className="gradient-text block">a global stage.</span>
               </h2>
-              <p className="text-stone text-lg font-light leading-relaxed mb-8">
+              <p className="text-lg font-light leading-relaxed mb-8" style={{ color: '#7A6B58' }}>
                 Register with The Ledger and unlock access to international competitions, annual summit invitations, and a worldwide community of finance-focused students — all through one platform.
               </p>
               <ul className="space-y-4 mb-10">
@@ -413,9 +416,9 @@ export default function Home() {
                   'Structured resources and learning content for members',
                   'A worldwide directory connecting chapters globally',
                 ].map(item => (
-                  <li key={item} className="flex items-center gap-3 text-stone font-light">
+                  <li key={item} className="flex items-center gap-3 font-light" style={{ color: '#7A6B58' }}>
                     <span className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center"
-                      style={{ background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.25)' }}>
+                      style={{ background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.30)' }}>
                       <span className="w-1.5 h-1.5 rounded-full bg-orange" />
                     </span>
                     {item}
@@ -429,24 +432,25 @@ export default function Home() {
 
             <FadeIn direction="right">
               <div className="space-y-4">
-                {/* Summit card */}
-                <div className="glass-warm rounded-2xl p-7 card-hover">
+                <div className="rounded-2xl p-7 card-hover-light"
+                  style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.08)', boxShadow: '0 8px 32px rgba(14,12,9,0.08)' }}>
                   <div className="flex items-center justify-between mb-5">
-                    <h4 className="text-cream font-semibold">Summits 2026</h4>
+                    <h4 className="font-semibold" style={{ color: '#1A1510' }}>Summits 2026</h4>
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-orange bg-orange/10 rounded-full px-3 py-1">Upcoming</span>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {[{ c: 'Tokyo', f: '🇯🇵' }, { c: 'Singapore', f: '🇸🇬' }, { c: 'Gold Coast', f: '🇦🇺' }, { c: 'Delhi', f: '🇮🇳' }].map(s => (
-                      <div key={s.c} className="glass rounded-xl p-4 flex items-center gap-3 hover:border-orange/20 transition-colors">
+                      <div key={s.c} className="rounded-xl p-4 flex items-center gap-3 transition-colors"
+                        style={{ background: '#FAF8F3', border: '1px solid rgba(26,21,16,0.07)' }}>
                         <span className="text-xl">{s.f}</span>
-                        <span className="text-cream text-sm font-medium">{s.c}</span>
+                        <span className="text-sm font-medium" style={{ color: '#1A1510' }}>{s.c}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-                {/* What you get strip */}
-                <div className="glass rounded-2xl p-6 card-hover">
-                  <p className="text-stone text-xs font-light">
+                <div className="rounded-2xl p-6 card-hover-light"
+                  style={{ background: '#FFFFFF', border: '1px solid rgba(26,21,16,0.07)', boxShadow: '0 4px 16px rgba(14,12,9,0.05)' }}>
+                  <p className="text-xs font-light" style={{ color: '#7A6B58' }}>
                     Registered clubs receive priority summit invitations, chapter spotlight features, and direct connections to industry mentors. It takes 2 minutes to apply.
                   </p>
                 </div>
