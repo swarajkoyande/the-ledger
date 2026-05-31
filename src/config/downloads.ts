@@ -9,7 +9,7 @@ export const DOWNLOAD_URLS = {
   mac: '',
   // GitHub Releases-hosted .dmg (no size limit). Powers the secondary
   // "Download via GitHub" button on the Mac card.
-  macGithub: '',
+  macGithub: 'https://github.com/swarajkoyande/the-ledger/releases/download/v1.0.0/TheLedger-1.0.0-universal.dmg',
   // .exe is 74 MB — served directly from Netlify
   windows: '/downloads/TheLedger-Setup-1.0.0.exe',
 }
