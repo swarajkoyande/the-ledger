@@ -1,5 +1,12 @@
-import { Apple, Monitor, Download, Zap, Wifi, Layout } from 'lucide-react'
+import { Apple, Monitor, Download, Zap, Wifi, Layout, Clock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import { DOWNLOAD_URLS } from '../config/downloads'
+
+const GithubIcon = ({ size = 16 }: { size?: number }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size} aria-hidden>
+    <path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z" />
+  </svg>
+)
 
 const whyFeatures = [
   {
@@ -62,13 +69,26 @@ export default function DownloadPage() {
               </div>
               <h3 className="text-2xl font-black text-white mb-1">macOS</h3>
               <p className="text-white/40 text-sm mb-6">Native experience · macOS 12+</p>
-              <a
-                href="#"
-                className="w-full btn-primary py-3.5 text-sm"
-              >
-                <Download size={15} />
-                Download for Mac (.dmg)
-              </a>
+              <div className="w-full flex gap-2.5">
+                {DOWNLOAD_URLS.mac ? (
+                  <a href={DOWNLOAD_URLS.mac} download className="flex-1 btn-primary py-3.5 text-sm">
+                    <Download size={15} /> Download for Mac (.dmg)
+                  </a>
+                ) : (
+                  <span className="flex-1 btn-primary py-3.5 text-sm opacity-60 cursor-default flex items-center justify-center gap-2">
+                    <Clock size={15} /> Coming Soon
+                  </span>
+                )}
+                {DOWNLOAD_URLS.macGithub && (
+                  <a href={DOWNLOAD_URLS.macGithub} target="_blank" rel="noopener noreferrer"
+                    title="Download the .dmg from GitHub"
+                    className="flex-shrink-0 flex flex-col items-center justify-center gap-1 px-3.5 py-2.5 rounded-xl text-[10px] font-semibold leading-tight text-center transition-all duration-300 hover:opacity-90"
+                    style={{ background: '#FFFFFF', color: '#1A1510' }}>
+                    <GithubIcon size={16} />
+                    <span>Download<br />via GitHub</span>
+                  </a>
+                )}
+              </div>
             </div>
           </FadeIn>
 
@@ -80,13 +100,15 @@ export default function DownloadPage() {
               </div>
               <h3 className="text-2xl font-black text-white mb-1">Windows</h3>
               <p className="text-white/40 text-sm mb-6">Native experience · Windows 10+</p>
-              <a
-                href="#"
-                className="w-full btn-secondary py-3.5 text-sm"
-              >
-                <Download size={15} />
-                Download for Windows (.exe)
-              </a>
+              {DOWNLOAD_URLS.windows ? (
+                <a href={DOWNLOAD_URLS.windows} download className="w-full btn-ghost py-3.5 text-sm">
+                  <Download size={15} /> Download for Windows (.exe)
+                </a>
+              ) : (
+                <span className="w-full btn-ghost py-3.5 text-sm opacity-60 cursor-default flex items-center justify-center gap-2">
+                  <Clock size={15} /> Coming Soon
+                </span>
+              )}
             </div>
           </FadeIn>
         </div>

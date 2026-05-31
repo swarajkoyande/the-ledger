@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ArrowRight, Menu, X } from 'lucide-react'
 import { useScrollY } from '../hooks/useScrollY'
+import logo from '../assets/logo.png'
 
 const navLinks = [
   { label: 'Chapters', to: '/chapters' },
@@ -30,11 +31,10 @@ export default function Navbar() {
           boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
         } : {}}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[80px] flex items-center justify-between">
           {/* Logo */}
-          <Link to="/home" className="group flex items-baseline gap-[3px] flex-shrink-0">
-            <span className="text-[22px] font-light tracking-tight text-cream/80 group-hover:text-cream transition-colors duration-300">The</span>
-            <span className="text-[22px] font-black tracking-tight text-orange group-hover:text-orange-light transition-colors duration-300">Ledger</span>
+          <Link to="/home" className="flex-shrink-0">
+            <img src={logo} alt="The Ledger" style={{ height: '110px', width: 'auto' }} />
           </Link>
 
           {/* Desktop nav */}

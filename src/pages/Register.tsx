@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, Building2, Globe2, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, Building2, Globe2, CheckCircle2, Loader2 } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 
 type FV = Record<string, string>
@@ -7,7 +7,8 @@ function useForm(init: FV) {
   const [v, set] = useState(init)
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     set(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  return { values: v, onChange }
+  const reset = () => set(init)
+  return { values: v, onChange, reset }
 }
 
 const inp = 'w-full text-sm font-light rounded-xl px-4 py-3.5 focus:outline-none transition-all duration-200'
@@ -21,6 +22,16 @@ const lbl = 'block text-[11px] font-medium uppercase tracking-[0.15em] mb-2'
 const lblStyle = { color: '#7A6B58' }
 
 const regions = ['Tokyo, Japan', 'Singapore', 'Gold Coast, Australia', 'Madrid, Spain', 'Delhi, India', 'Tamil Nadu, India', 'Gujarat, India', 'Other']
+
+async function netlifySubmit(formName: string, values: FV) {
+  const body = new URLSearchParams({ 'form-name': formName, ...values })
+  const res = await fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+}
 
 function SuccessBanner({ title, sub }: { title: string; sub: string }) {
   return (
@@ -37,8 +48,42 @@ function SuccessBanner({ title, sub }: { title: string; sub: string }) {
 export default function RegisterPage() {
   const club = useForm({ clubName: '', schoolName: '', contactName: '', email: '', country: '', members: '', about: '' })
   const head = useForm({ fullName: '', email: '', region: '', school: '', background: '', motivation: '' })
+
   const [clubDone, setClubDone] = useState(false)
+  const [clubLoading, setClubLoading] = useState(false)
+  const [clubError, setClubError] = useState('')
+
   const [headDone, setHeadDone] = useState(false)
+  const [headLoading, setHeadLoading] = useState(false)
+  const [headError, setHeadError] = useState('')
+
+  const handleClubSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setClubLoading(true)
+    setClubError('')
+    try {
+      await netlifySubmit('register-club', club.values)
+      setClubDone(true)
+    } catch {
+      setClubError('Something went wrong. Please try again or email us directly.')
+    } finally {
+      setClubLoading(false)
+    }
+  }
+
+  const handleHeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setHeadLoading(true)
+    setHeadError('')
+    try {
+      await netlifySubmit('regional-head', head.values)
+      setHeadDone(true)
+    } catch {
+      setHeadError('Something went wrong. Please try again or email us directly.')
+    } finally {
+      setHeadLoading(false)
+    }
+  }
 
   return (
     <main>
@@ -98,7 +143,9 @@ export default function RegisterPage() {
                 {clubDone ? (
                   <SuccessBanner title="Application Received!" sub="We'll review your registration and reach out within a few days with next steps." />
                 ) : (
-                  <form onSubmit={e => { e.preventDefault(); setClubDone(true) }} className="space-y-4">
+                  <form onSubmit={handleClubSubmit} className="space-y-4">
+                    {/* Honeypot */}
+                    <input type="hidden" name="bot-field" />
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label className={lbl} style={lblStyle}>Club Name *</label>
@@ -131,8 +178,11 @@ export default function RegisterPage() {
                       <label className={lbl} style={lblStyle}>Tell us about your club</label>
                       <textarea name="about" rows={3} value={club.values.about} onChange={club.onChange} placeholder="Activities, focus areas, past events…" className={`${inp} resize-none`} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
-                    <button type="submit" className="w-full btn-primary py-4 text-base mt-2">
-                      Register Your Club <ArrowRight size={16} />
+                    {clubError && (
+                      <p className="text-sm text-red-500 font-light">{clubError}</p>
+                    )}
+                    <button type="submit" disabled={clubLoading} className="w-full btn-primary py-4 text-base mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                      {clubLoading ? <Loader2 size={16} className="animate-spin" /> : <><span>Register Your Club</span> <ArrowRight size={16} /></>}
                     </button>
                   </form>
                 )}
@@ -158,7 +208,9 @@ export default function RegisterPage() {
                 {headDone ? (
                   <SuccessBanner title="Application Submitted!" sub="We review every application carefully and will be in touch soon." />
                 ) : (
-                  <form onSubmit={e => { e.preventDefault(); setHeadDone(true) }} className="space-y-4">
+                  <form onSubmit={handleHeadSubmit} className="space-y-4">
+                    {/* Honeypot */}
+                    <input type="hidden" name="bot-field" />
                     <div>
                       <label className={lbl} style={lblStyle}>Full Name *</label>
                       <input type="text" name="fullName" required value={head.values.fullName} onChange={head.onChange} placeholder="Your full name" className={inp} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
@@ -186,8 +238,11 @@ export default function RegisterPage() {
                       <label className={lbl} style={lblStyle}>Why do you want to be a Regional Head? *</label>
                       <textarea name="motivation" rows={3} required value={head.values.motivation} onChange={head.onChange} placeholder="Your vision for growing The Ledger in your region…" className={`${inp} resize-none`} style={inpStyle} onFocus={inpFocus} onBlur={inpBlur} />
                     </div>
-                    <button type="submit" className="w-full btn-ghost py-4 text-base mt-2 border-cream/15 hover:border-orange/40 hover:text-orange">
-                      Submit Application <ArrowRight size={16} />
+                    {headError && (
+                      <p className="text-sm text-red-500 font-light">{headError}</p>
+                    )}
+                    <button type="submit" disabled={headLoading} className="w-full btn-ghost py-4 text-base mt-2 border-cream/15 hover:border-orange/40 hover:text-orange disabled:opacity-60 disabled:cursor-not-allowed">
+                      {headLoading ? <Loader2 size={16} className="animate-spin" /> : <><span>Submit Application</span> <ArrowRight size={16} /></>}
                     </button>
                   </form>
                 )}

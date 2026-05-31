@@ -13,5 +13,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Netlify Forms: static declarations so Netlify detects them at build time -->
+    <form name="register-club" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="clubName" /><input name="schoolName" />
+      <input name="contactName" /><input name="email" />
+      <input name="country" /><input name="members" />
+      <textarea name="about"></textarea>
+    </form>
+    <form name="regional-head" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="fullName" /><input name="email" />
+      <input name="region" /><input name="school" />
+      <textarea name="background"></textarea><textarea name="motivation"></textarea>
+    </form>
+    <form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" /><input name="email" />
+    </form>
   </body>
 </html>

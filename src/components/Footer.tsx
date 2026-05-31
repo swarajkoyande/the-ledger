@@ -21,6 +21,20 @@ export default function Footer() {
   const [email, setEmail] = useState('')
   const [done, setDone] = useState(false)
 
+  const handleNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+    try {
+      const body = new URLSearchParams({ 'form-name': 'newsletter', email })
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      })
+    } catch { /* show success regardless */ }
+    setDone(true)
+  }
+
   return (
     <footer style={{ background: '#0A0806', borderTop: '1px solid rgba(245,240,232,0.05)' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-10">
@@ -79,7 +93,7 @@ export default function Footer() {
             {done ? (
               <p className="text-tan text-sm font-medium">You're on the list ✦</p>
             ) : (
-              <form onSubmit={e => { e.preventDefault(); if (email) setDone(true) }} className="space-y-2">
+              <form onSubmit={handleNewsletter} className="space-y-2">
                 <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   className="w-full bg-cream/4 border border-cream/8 rounded-lg px-4 py-2.5 text-sm font-light text-cream placeholder-stone/60 focus:outline-none focus:border-orange/40 transition-all"
