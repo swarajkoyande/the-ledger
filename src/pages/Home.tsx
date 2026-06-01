@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
@@ -133,6 +134,83 @@ function Quote({ text, name, school, delay }: { text: string; name: string; scho
         </div>
       </div>
     </FadeIn>
+  )
+}
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+const faqItems = [
+  {
+    q: 'Is The Ledger free to join?',
+    a: 'Yes — joining The Ledger and creating an account on the app is completely free. There are no subscription fees, no paywalls on course content, and no hidden costs. The competition has no entry fee either. We believe access to economics and finance education shouldn\'t depend on what school you attend or where you live.',
+  },
+  {
+    q: 'Do I need to be part of a school club to sign up?',
+    a: 'No. Any high school student can create a Ledger account and access the app independently — you don\'t need to be part of a registered chapter or club. That said, if your school doesn\'t have a Ledger chapter yet, you\'re always welcome to start one. We provide full onboarding support for new chapter founders.',
+  },
+  {
+    q: 'How does the Economics & Finance Competition work?',
+    a: 'The competition runs in two phases over 4–6 weeks. In Phase 1, teams of 2–4 students submit a 600–900 word analytical essay responding to a Japan economics case study prompt, co-designed with the Japan Economics Organisation. Essays are graded by The Ledger\'s proprietary AI grading system and reviewed by a human panel. The top teams advance to Phase 2 — a live in-person case challenge where teams present and debate economic proposals before a judging panel. Every participant receives a personal AI scorecard with criterion-level feedback.',
+  },
+  {
+    q: 'What countries and cities is The Ledger active in?',
+    a: 'We currently have chapters and active members in Japan (Tokyo), India (Mumbai and Delhi), Singapore, and Australia (Gold Coast). The Ledger App is open globally — if you\'re a high school student anywhere with an interest in economics or finance, you\'re welcome to join. To bring a chapter to your city, reach out at theledger.japan@gmail.com.',
+  },
+  {
+    q: 'Do I need prior knowledge of economics or finance to join?',
+    a: 'Not at all. The Ledger is built for students at every level — from complete beginners to those already studying economics at school. The app includes structured learning content starting from the fundamentals. Curiosity is the only requirement.',
+  },
+]
+
+function FAQ() {
+  const [open, setOpen] = useState(0)
+  return (
+    <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: '#0E0C09' }}>
+      <div className="absolute left-1/4 bottom-0 w-80 h-80 rounded-full bg-orange/5 blur-[100px] pointer-events-none" />
+      <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
+        <FadeIn className="mb-12 text-center">
+          <p className="text-tan text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">Support</p>
+          <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-black text-cream leading-tight">
+            Frequently asked questions
+          </h2>
+        </FadeIn>
+        <div className="space-y-3">
+          {faqItems.map((item, i) => {
+            const isOpen = open === i
+            return (
+              <div
+                key={i}
+                onMouseEnter={() => setOpen(i)}
+                className="glass rounded-2xl overflow-hidden cursor-default"
+                style={{
+                  border: isOpen
+                    ? '1px solid rgba(234,115,23,0.25)'
+                    : '1px solid rgba(245,240,232,0.07)',
+                  borderLeft: isOpen ? '3px solid #ea7317' : '3px solid rgba(245,240,232,0.07)',
+                  transition: 'border-color 0.3s ease',
+                }}
+              >
+                <div className="w-full px-6 py-5 text-left">
+                  <span className="text-cream font-medium text-base leading-snug">{item.q}</span>
+                </div>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateRows: isOpen ? '1fr' : '0fr',
+                    transition: 'grid-template-rows 0.35s ease',
+                  }}
+                >
+                  <div style={{ overflow: 'hidden' }}>
+                    <p className="text-stone font-light leading-relaxed text-sm px-6 pb-6">
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -524,6 +602,9 @@ export default function Home() {
           </div>
         </FadeIn>
       </section>
+
+      {/* ── FAQ ───────────────────────────────────────────────────────────── */}
+      <FAQ />
     </main>
   )
 }

@@ -117,6 +117,14 @@ export default function Footer() {
             TOKYO · SINGAPORE · GOLD COAST · MADRID · INDIA
           </p>
         </div>
+        <div className="mt-4 text-center sm:text-left">
+          <p className="text-stone/50 text-xs font-light">
+            Contact:{' '}
+            <a href="mailto:theledger.japan@gmail.com" className="hover:text-stone transition-colors">
+              theledger.japan@gmail.com
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   )
