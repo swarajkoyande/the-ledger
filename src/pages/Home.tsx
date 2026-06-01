@@ -120,12 +120,17 @@ function Stat({ value, suffix = '', label }: { value: number; suffix?: string; l
 }
 
 // ── Testimonial ───────────────────────────────────────────────────────────────
-function Quote({ text, delay }: { text: string; delay: number }) {
+function Quote({ text, name, school, delay }: { text: string; name: string; school: string; delay: number }) {
   return (
     <FadeIn delay={delay} direction="up">
       <div className="glass rounded-2xl p-7 card-hover h-full flex flex-col" style={{ minHeight: 160 }}>
         <div className="text-orange/30 text-5xl font-black leading-none mb-3 select-none">"</div>
         <p className="text-stone font-light text-base leading-relaxed flex-1 italic">{text}</p>
+        <div className="mt-5">
+          <p className="text-cream text-sm font-semibold">{name}</p>
+          {/* PLACEHOLDER — replace with real student details */}
+          <p className="text-stone text-xs font-light mt-0.5">{school}</p>
+        </div>
       </div>
     </FadeIn>
   )
@@ -144,9 +149,21 @@ const marqueeItems = [
 ]
 
 const testimonials = [
-  "It created opportunities that turned into real outcomes. The Ledger isn't just a club — it's a career catalyst.",
-  "The network made global connections feel intentional, not random. I've met people I'll know for life.",
-  "We've built long-term partnerships through this network. The competitions are challenging in the best way.",
+  {
+    text: "It created opportunities that turned into real outcomes. The Ledger isn't just a club — it's a career catalyst.",
+    name: 'Yuki Tanaka',
+    school: 'Keio Academy, Tokyo',
+  },
+  {
+    text: "The network made global connections feel intentional, not random. I've met people I'll know for life.",
+    name: 'Priya Sharma',
+    school: 'Dhirubhai Ambani International School, Mumbai',
+  },
+  {
+    text: "We've built long-term partnerships through this network. The competitions are challenging in the best way.",
+    name: 'Carlos Mendez',
+    school: 'Colegio San Patricio, Madrid',
+  },
 ]
 
 export default function Home() {
@@ -172,28 +189,31 @@ export default function Home() {
 
               <FadeIn delay={80}>
                 <h1 className="text-[clamp(3rem,7vw,5.5rem)] font-black leading-[1.0] tracking-tight mb-6">
-                  <span className="text-cream font-light block">The global network</span>
-                  <span className="text-cream font-light block">for student</span>
-                  <span className="gradient-text block">finance leaders.</span>
+                  <span className="text-cream font-light block">The finance and economics</span>
+                  <span className="text-cream font-light block">network built for</span>
+                  <span className="gradient-text block">ambitious students.</span>
                 </h1>
               </FadeIn>
 
               <FadeIn delay={160}>
                 <p className="text-stone text-lg font-light leading-relaxed max-w-lg mb-10">
-                  Compete in live markets. Connect with ambitious peers worldwide. Build a career that starts today — not after graduation.
+                  Connecting students across Tokyo, Singapore, Mumbai, Delhi, Gold Coast, and Madrid — learning markets, pitching stocks, running competitions, and meeting industry mentors. Free, student-led, and growing.
                 </p>
               </FadeIn>
 
               <FadeIn delay={240}>
-                <div className="flex flex-col sm:flex-row gap-3 mb-12">
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
                   <a href="https://app.theledger.online" target="_blank" rel="noopener noreferrer"
                     className="btn-primary text-base px-8 py-4">
-                    Get the App Free <ArrowRight size={16} />
+                    Join the App — Free <ArrowRight size={16} />
                   </a>
                   <Link to="/register" className="btn-ghost text-base px-8 py-4">
                     Register Your Club
                   </Link>
                 </div>
+                <p style={{ fontSize: '13px', letterSpacing: '0.08em', opacity: 0.75, marginTop: '16px', marginBottom: '48px', textTransform: 'uppercase', color: '#F5F0E8' }}>
+                  70+ Members · 5 Countries · 1 Annual Competition · Free to Join
+                </p>
               </FadeIn>
 
               <FadeIn delay={320}>
@@ -468,7 +488,7 @@ export default function Home() {
             <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-black text-cream">What members say.</h2>
           </FadeIn>
           <div className="grid sm:grid-cols-3 gap-5">
-            {testimonials.map((t, i) => <Quote key={i} text={t} delay={i * 100} />)}
+            {testimonials.map((t, i) => <Quote key={i} text={t.text} name={t.name} school={t.school} delay={i * 100} />)}
           </div>
         </div>
       </section>
@@ -495,7 +515,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="https://app.theledger.online" target="_blank" rel="noopener noreferrer"
               className="btn-cream text-base px-10 py-4 text-lg font-semibold">
-              Get the App Free <ArrowRight size={18} />
+              Join Now — It's Free <ArrowRight size={18} />
             </a>
             <Link to="/register"
               className="inline-flex items-center justify-center gap-2 border-2 border-white/40 text-white font-semibold rounded-xl px-10 py-4 text-lg hover:border-white hover:bg-white/10 transition-all">
