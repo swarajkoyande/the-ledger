@@ -6,6 +6,8 @@ import logo from '../assets/logo.png'
 
 const navLinks = [
   { label: 'Chapters', to: '/chapters' },
+  { label: 'Events', to: '/events' },
+  { label: 'Competitions', to: '/competitions' },
   { label: 'The App', to: '/app' },
   { label: 'Register', to: '/register' },
 ]
@@ -33,7 +35,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[80px] flex items-center justify-between">
           {/* Logo */}
-          <Link to="/home" className="flex-shrink-0">
+          <Link to="/" className="flex-shrink-0">
             <img src={logo} alt="The Ledger" style={{ height: '110px', width: 'auto' }} />
           </Link>
 

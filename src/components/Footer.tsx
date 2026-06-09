@@ -42,7 +42,7 @@ export default function Footer() {
 
           {/* Brand — spans 2 cols */}
           <div className="col-span-2">
-            <Link to="/home" className="inline-flex items-baseline gap-[3px] mb-5">
+            <Link to="/" className="inline-flex items-baseline gap-[3px] mb-5">
               <span className="text-2xl font-light text-cream/60">The</span>
               <span className="text-2xl font-black text-orange">Ledger</span>
             </Link>
