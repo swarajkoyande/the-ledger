@@ -12,6 +12,7 @@ import CompetitionsFuturistic from './pages/CompetitionsFuturistic'
 import CompetitionsMotion from './pages/CompetitionsMotion'
 import CompetitionsMinimal from './pages/CompetitionsMinimal'
 import CompetitionsFinal from './pages/CompetitionsFinal'
+import WorkshopRegister from './pages/WorkshopRegister'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/competitions-motion"    element={<CompetitionsMotion />} />
         <Route path="/competitions-minimal"   element={<CompetitionsMinimal />} />
         <Route path="/competitions-final"     element={<CompetitionsFinal />} />
+        <Route path="/workshop-register" element={<WorkshopRegister />} />
         {/* Legacy redirects */}
         <Route path="/download"    element={<Navigate to="/app" replace />} />
         <Route path="/ledger-app"  element={<Navigate to="/app" replace />} />
