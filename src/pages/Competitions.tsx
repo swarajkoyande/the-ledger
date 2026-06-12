@@ -2,250 +2,182 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import { useState, useEffect, useRef } from 'react'
+import * as d3 from 'd3'
+import * as topojson from 'topojson-client'
 
 // ── WORLD MAP ─────────────────────────────────────────────────────────────────
-const MAP_W = 800, MAP_H = 400
+const MAP_W = 1000, MAP_H = 500
 
-function lonLatToXY(lon: number, lat: number): [number, number] {
-  return [
-    (lon + 180) / 360 * MAP_W,
-    (90 - lat) / 180 * MAP_H,
-  ]
-}
-
-const CHAPTER_CITIES = [
-  { id: 'tokyo',     name: 'Tokyo',      lon: 139.7,  lat: 35.7,  members: 12, flag: '🇯🇵', hq: true  },
-  { id: 'singapore', name: 'Singapore',  lon: 103.8,  lat: 1.4,   members: 8,  flag: '🇸🇬', hq: false },
-  { id: 'mumbai',    name: 'Mumbai',     lon: 72.9,   lat: 19.1,  members: 15, flag: '🇮🇳', hq: false },
-  { id: 'madrid',    name: 'Madrid',     lon: -3.7,   lat: 40.4,  members: 9,  flag: '🇪🇸', hq: false },
-  { id: 'london',    name: 'London',     lon: -0.1,   lat: 51.5,  members: 11, flag: '🇬🇧', hq: false },
-  { id: 'newyork',   name: 'New York',   lon: -74.0,  lat: 40.7,  members: 7,  flag: '🇺🇸', hq: false },
-  { id: 'sydney',    name: 'Sydney',     lon: 151.2,  lat: -33.9, members: 6,  flag: '🇦🇺', hq: false },
+const CHAPTERS = [
+  { id: 'tokyo',     lon: 139.69, lat: 35.69,  flag: '🇯🇵', title: 'Tokyo',      country: 'Japan',
+    tag: 'Founding Chapter', tc: '#f97316', tb: 'rgba(249,115,22,0.1)', tbr: 'rgba(249,115,22,0.28)',
+    stats: ['35+ Members', '7 Schools'],
+    desc: 'Our flagship chapter — weekly market discussions, live trading simulations, and a growing alumni network spanning the city.' },
+  { id: 'india',     lon: 78.96,  lat: 20.59,  flag: '🇮🇳', title: 'India',       country: 'Delhi · Tamil Nadu · Gujarat',
+    tag: 'Expanding Fast', tc: '#4ade80', tb: 'rgba(74,222,128,0.08)', tbr: 'rgba(74,222,128,0.2)',
+    stats: ['3 Regions', 'Since 2024'],
+    desc: "The Ledger's most ambitious expansion — Delhi, Tamil Nadu, Gujarat — meeting the demand for applied financial education." },
+  { id: 'madrid',    lon: -3.70,  lat: 40.42,  flag: '🇪🇸', title: 'Madrid',      country: 'Spain',
+    tag: 'European Hub', tc: '#C4A882', tb: 'rgba(196,168,130,0.08)', tbr: 'rgba(196,168,130,0.22)',
+    stats: ['EU Chapter', 'Active'],
+    desc: "The Ledger's European home. Market deep-dives, case competitions, and discussions on Europe's evolving economic landscape." },
+  { id: 'goldcoast', lon: 153.43, lat: -28.02, flag: '🇦🇺', title: 'Gold Coast',  country: 'Australia',
+    tag: 'Fintech Focus', tc: '#818cf8', tb: 'rgba(129,140,248,0.08)', tbr: 'rgba(129,140,248,0.2)',
+    stats: ['Fintech', 'Active'],
+    desc: 'Where finance meets technology. Algorithmic trading, fintech models, and how software is reshaping capital markets.' },
 ]
 
-// Simplified continent polygons (equirectangular, 800×400 viewBox)
-const LAND_PATHS = [
-  // North America
-  'M44,42 L82,28 L132,24 L182,30 L212,42 L230,62 L240,84 L238,104 L232,126 L222,148 L214,168 L208,186 L200,194 L190,186 L178,168 L162,148 L144,128 L126,104 L106,86 L88,76 L64,66 L46,58 Z',
-  // Greenland
-  'M218,18 L252,12 L282,18 L290,34 L278,52 L256,58 L232,50 L218,34 Z',
-  // South America
-  'M200,194 L222,178 L244,170 L270,176 L314,182 L318,208 L298,254 L270,302 L246,330 L226,360 L214,374 L202,366 L194,336 L190,296 L190,254 L198,220 Z',
-  // Europe
-  'M382,118 L362,108 L355,96 L364,80 L380,66 L397,53 L420,46 L446,42 L464,46 L474,62 L470,82 L462,100 L450,112 L446,124 L428,130 L406,124 L388,120 Z',
-  // Africa
-  'M384,120 L352,138 L342,164 L344,188 L362,200 L388,204 L414,202 L432,212 L442,240 L440,274 L428,310 L412,338 L394,344 L374,338 L356,310 L342,274 L336,240 L340,207 L350,182 L356,160 L366,140 L376,124 Z',
-  // Asia (main body)
-  'M468,106 L490,86 L516,66 L558,50 L604,42 L648,42 L692,52 L726,62 L750,84 L750,110 L738,134 L718,154 L694,168 L666,180 L640,184 L618,190 L600,196 L584,182 L566,190 L552,208 L538,202 L520,188 L506,172 L496,156 L488,140 L476,126 Z',
-  // India
-  'M536,152 L560,148 L574,160 L576,178 L568,194 L554,204 L540,198 L528,182 L527,165 Z',
-  // SE Asia
-  'M614,188 L636,182 L652,186 L663,200 L663,216 L648,224 L630,220 L618,209 Z',
-  // Japan
-  'M708,103 L716,96 L724,100 L724,110 L718,117 L710,118 Z',
-  // Korea
-  'M698,110 L706,106 L712,110 L710,118 L702,120 L696,116 Z',
-  // British Isles
-  'M372,64 L378,60 L384,62 L384,72 L376,76 L370,70 Z',
-  // Australia
-  'M658,268 L672,250 L694,228 L722,222 L742,240 L746,264 L738,286 L720,298 L700,302 L678,296 L660,282 Z',
-  // New Zealand (tiny)
-  'M754,302 L758,296 L764,300 L762,308 L756,310 Z',
-]
+type Chapter = typeof CHAPTERS[number]
+type PinPos = { ch: Chapter; cx: number; cy: number }
 
-type TooltipState = { id: string; x: number; y: number } | null
 
 function WorldMap() {
-  const [tooltip, setTooltip] = useState<TooltipState>(null)
-  const [visible, setVisible] = useState(false)
-  const wrapRef = useRef<HTMLDivElement>(null)
+  const canvasRef  = useRef<HTMLCanvasElement>(null)
+  const svgRef     = useRef<SVGSVGElement>(null)
+  const wrapRef    = useRef<HTMLDivElement>(null)
+  const cardRef    = useRef<HTMLDivElement>(null)
+  const [activeChapter, setActiveChapter] = useState<Chapter | null>(null)
+  const [cardPos, setCardPos] = useState({ left: 0, top: 0, flip: false })
+  const [pins, setPins] = useState<PinPos[]>([])
 
   useEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setVisible(true)
-    }, { threshold: 0.25 })
-    obs.observe(el)
-    return () => obs.disconnect()
+    let cancelled = false
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const W = MAP_W, H = MAP_H
+    canvas.width = W
+    canvas.height = H
+    const ctx = canvas.getContext('2d')!
+    ctx.fillStyle = '#0d0c0a'
+    ctx.fillRect(0, 0, W, H)
+
+    ;(async () => {
+      const world = await fetch('https://unpkg.com/world-atlas@2/countries-110m.json').then(r => r.json())
+      if (cancelled) return
+      const land = topojson.feature(world as Parameters<typeof topojson.feature>[0], (world as any).objects.land)
+
+      // Render land mask on offscreen canvas
+      const off = document.createElement('canvas')
+      off.width = W; off.height = H
+      const oc = off.getContext('2d')!
+      const proj = d3.geoEquirectangular().scale(H / Math.PI).translate([W / 2, H / 2])
+      const path = d3.geoPath(proj, oc)
+      oc.fillStyle = '#fff'
+      oc.beginPath(); path(land); oc.fill()
+
+      const pix = oc.getImageData(0, 0, W, H).data
+      const isLand = (x: number, y: number) => {
+        const i = (Math.round(y) * W + Math.round(x)) * 4
+        return i >= 0 && i < pix.length && pix[i] > 100
+      }
+
+      // Draw dot grid
+      const SP = 7, R = 2.5
+      ctx.fillStyle = 'rgba(160,155,148,0.55)'
+      for (let y = SP / 2; y < H; y += SP)
+        for (let x = SP / 2; x < W; x += SP)
+          if (isLand(x, y)) { ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2); ctx.fill() }
+
+      // Compute pin screen positions using same projection
+      const computed: PinPos[] = CHAPTERS.map(ch => {
+        const [cx, cy] = proj([ch.lon, ch.lat]) as [number, number]
+        return { ch, cx, cy }
+      })
+      if (!cancelled) setPins(computed)
+    })()
+
+    return () => { cancelled = true }
   }, [])
 
-  const hqCity = CHAPTER_CITIES.find(c => c.hq)!
+  const handlePinEnter = (pin: PinPos) => {
+    const wrap = wrapRef.current
+    const card = cardRef.current
+    if (!wrap || !card) return
+    const mapW = wrap.offsetWidth
+    const mapH = wrap.offsetHeight
+    const scaleX = mapW / MAP_W
+    const scaleY = mapH / MAP_H
+    const CW = 234, GAP = 14
+    const pinX = pin.cx * scaleX
+    const pinY = pin.cy * scaleY
+    const goRight = pinX + GAP + CW < mapW - 4
+    const left = goRight ? pinX + GAP : pinX - GAP - CW
+    const cardH = card.offsetHeight || 175
+    let top = pinY - cardH / 2
+    if (top < 4) top = 4
+    if (top + cardH > mapH + 60) top = mapH + 60 - cardH
+    setCardPos({ left, top, flip: !goRight })
+    setActiveChapter(pin.ch)
+  }
 
   return (
-    <div ref={wrapRef} style={{ position: 'relative', width: '100%' }}>
-      {/* HUD header */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        marginBottom: '16px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{
-            display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%',
-            background: '#4ade80',
-            boxShadow: '0 0 8px rgba(74,222,128,0.9)',
-            animation: 'cf-hud-blink 2s ease-in-out infinite',
-          }}/>
-          <span style={{ fontFamily: 'monospace', fontSize: '9px', color: 'rgba(249,115,22,0.7)', letterSpacing: '0.25em', textTransform: 'uppercase' }}>
-            GLOBAL_REACH
-          </span>
-        </div>
-        <span style={{ fontFamily: 'monospace', fontSize: '9px', color: 'rgba(196,168,130,0.45)', letterSpacing: '0.18em' }}>
-          {CHAPTER_CITIES.length} CHAPTERS · 7 COUNTRIES
-        </span>
-      </div>
+    <div style={{ position: 'relative' }}>
+      {/* Map wrap — canvas + SVG pins stacked */}
+      <div
+        ref={wrapRef}
+        style={{ position: 'relative', background: '#0d0c0a', borderRadius: '16px', overflow: 'hidden', minHeight: '200px' }}
+      >
+        <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: 'auto' }} />
 
-      {/* Map container */}
-      <div style={{
-        position: 'relative',
-        border: '1px solid rgba(249,115,22,0.14)',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        background: 'rgba(8,18,38,0.7)',
-      }}>
         <svg
+          ref={svgRef}
           viewBox={`0 0 ${MAP_W} ${MAP_H}`}
-          style={{ width: '100%', height: 'auto', display: 'block' }}
-          preserveAspectRatio="xMidYMid meet"
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'all' }}
         >
-          {/* Ocean base */}
-          <rect width={MAP_W} height={MAP_H} fill="transparent" />
-
-          {/* Grid */}
-          {[-60,-30,0,30,60].map(lat => {
-            const y = (90 - lat) / 180 * MAP_H
-            return <line key={`lat${lat}`} x1={0} y1={y} x2={MAP_W} y2={y}
-              stroke={lat === 0 ? 'rgba(249,115,22,0.14)' : 'rgba(249,115,22,0.05)'}
-              strokeWidth={lat === 0 ? 1 : 0.5}
-              strokeDasharray={lat === 0 ? undefined : '3 6'}
-            />
-          })}
-          {[-120,-60,0,60,120].map(lon => {
-            const x = (lon + 180) / 360 * MAP_W
-            return <line key={`lon${lon}`} x1={x} y1={0} x2={x} y2={MAP_H}
-              stroke="rgba(249,115,22,0.05)" strokeWidth="0.5" strokeDasharray="3 6"
-            />
-          })}
-
-          {/* Continent fills */}
-          {LAND_PATHS.map((d, i) => (
-            <path key={i} d={d}
-              fill="rgba(196,168,130,0.10)"
-              stroke="rgba(196,168,130,0.18)"
-              strokeWidth="0.7"
-              strokeLinejoin="round"
-            />
+          {pins.map(pin => (
+            <g
+              key={pin.ch.id}
+              transform={`translate(${pin.cx.toFixed(1)},${pin.cy.toFixed(1)})`}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => handlePinEnter(pin)}
+              onMouseLeave={() => setActiveChapter(null)}
+            >
+              <circle r="8" fill="none" stroke="#f97316" strokeWidth="1.2"
+                style={{ opacity: activeChapter?.id === pin.ch.id ? 1 : 0,
+                         animation: activeChapter?.id === pin.ch.id ? 'pr 1.6s ease-out infinite' : 'none' }}
+              />
+              <circle r={activeChapter?.id === pin.ch.id ? 6 : 4.5} fill="#f97316"
+                style={{ transition: 'r 0.15s ease',
+                         filter: 'drop-shadow(0 0 6px rgba(249,115,22,0.8))' }}
+              />
+            </g>
           ))}
-
-          {/* Connection lines from HQ (Tokyo) */}
-          {visible && CHAPTER_CITIES.filter(c => !c.hq).map(city => {
-            const [x1, y1] = lonLatToXY(hqCity.lon, hqCity.lat)
-            const [x2, y2] = lonLatToXY(city.lon, city.lat)
-            return (
-              <line key={`line-${city.id}`}
-                x1={x1} y1={y1} x2={x2} y2={y2}
-                stroke="rgba(249,115,22,0.18)" strokeWidth="0.7"
-                strokeDasharray="4 5"
-              >
-                <animate attributeName="stroke-dashoffset" from="0" to="-18" dur="3s" repeatCount="indefinite"/>
-              </line>
-            )
-          })}
-
-          {/* City pins */}
-          {CHAPTER_CITIES.map((city, i) => {
-            const [cx, cy] = lonLatToXY(city.lon, city.lat)
-            const isHovered = tooltip?.id === city.id
-            const delay = `${i * 0.4}s`
-            return (
-              <g key={city.id}
-                onMouseEnter={e => {
-                  const svgEl = (e.currentTarget.ownerSVGElement as SVGSVGElement)
-                  const rect = svgEl.getBoundingClientRect()
-                  const svgW = svgEl.viewBox.baseVal.width
-                  const svgH = svgEl.viewBox.baseVal.height
-                  const scaleX = rect.width / svgW
-                  const scaleY = rect.height / svgH
-                  setTooltip({ id: city.id, x: cx * scaleX + rect.left, y: cy * scaleY + rect.top })
-                }}
-                onMouseLeave={() => setTooltip(null)}
-                style={{ cursor: 'pointer' }}
-              >
-                {/* Outer pulse ring */}
-                {visible && (
-                  <circle cx={cx} cy={cy} r="4" fill="none" stroke="rgba(249,115,22,0.5)" strokeWidth="1">
-                    <animate attributeName="r" values="4;14;4" dur="3s" begin={delay} repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" begin={delay} repeatCount="indefinite"/>
-                  </circle>
-                )}
-                {/* Core dot */}
-                <circle cx={cx} cy={cy}
-                  r={city.hq ? 5.5 : isHovered ? 5 : 3.5}
-                  fill={city.hq ? '#F97316' : '#F97316'}
-                  style={{
-                    filter: `drop-shadow(0 0 ${city.hq ? 10 : isHovered ? 8 : 5}px rgba(249,115,22,${city.hq ? 1 : isHovered ? 0.9 : 0.65}))`,
-                    transition: 'r 0.15s',
-                  }}
-                />
-                {/* HQ crown ring */}
-                {city.hq && (
-                  <circle cx={cx} cy={cy} r="9" fill="none" stroke="rgba(249,115,22,0.45)" strokeWidth="1.2"/>
-                )}
-              </g>
-            )
-          })}
-
-          {/* Equator label */}
-          <text x="8" y={MAP_H/2 - 4}
-            style={{ fontFamily: 'monospace', fontSize: '7px', fill: 'rgba(249,115,22,0.35)', letterSpacing: '0.15em' }}>
-            EQUATOR
-          </text>
         </svg>
 
-        {/* HTML tooltip overlay */}
-        {tooltip && (() => {
-          const city = CHAPTER_CITIES.find(c => c.id === tooltip.id)!
-          return (
-            <div style={{
-              position: 'fixed',
-              left: tooltip.x + 12,
-              top: tooltip.y - 28,
-              transform: 'translateZ(0)',
-              zIndex: 50,
-              pointerEvents: 'none',
-              background: 'rgba(10,12,8,0.95)',
-              border: '1px solid rgba(249,115,22,0.4)',
-              borderRadius: '8px',
-              padding: '8px 12px',
-              minWidth: '120px',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
-            }}>
-              <div style={{ fontFamily: 'monospace', fontSize: '11px', color: '#F5F0E8', fontWeight: 700, marginBottom: '2px' }}>
-                {city.flag} {city.name}
-                {city.hq && <span style={{ marginLeft: '6px', fontSize: '8px', color: '#F97316', letterSpacing: '0.1em' }}>HQ</span>}
-              </div>
-              <div style={{ fontFamily: 'monospace', fontSize: '9px', color: 'rgba(249,115,22,0.7)', letterSpacing: '0.08em' }}>
-                {city.members} members
-              </div>
+        {/* Hover card */}
+        <div
+          ref={cardRef}
+          style={{
+            position: 'absolute',
+            left: cardPos.left,
+            top: cardPos.top,
+            width: '230px',
+            background: '#1c1a16',
+            border: '0.5px solid rgba(249,115,22,0.3)',
+            borderRadius: '14px',
+            padding: '13px 15px',
+            pointerEvents: 'none',
+            zIndex: 20,
+            opacity: activeChapter ? 1 : 0,
+            transform: activeChapter
+              ? 'scaleX(1)'
+              : `scaleX(0.88)`,
+            transformOrigin: cardPos.flip ? 'right center' : 'left center',
+            transition: 'opacity 0.16s ease, transform 0.16s ease',
+          }}
+        >
+          {activeChapter && (<>
+            <div style={{ fontSize: '18px', marginBottom: '5px', lineHeight: 1 }}>{activeChapter.flag}</div>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#f97316', marginBottom: '2px', fontFamily: '"Futura","Century Gothic",sans-serif' }}>{activeChapter.title}</div>
+            <div style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.4)', marginBottom: '7px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>{activeChapter.country}</div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: '9px', fontWeight: 300 }}>{activeChapter.desc}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+              <span style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: activeChapter.tb, color: activeChapter.tc, border: `0.5px solid ${activeChapter.tbr}`, fontFamily: 'monospace' }}>{activeChapter.tag}</span>
+              {activeChapter.stats.map(s => (
+                <span key={s} style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '0.5px solid rgba(255,255,255,0.1)', fontFamily: 'monospace' }}>{s}</span>
+              ))}
             </div>
-          )
-        })()}
-
-        {/* Bottom legend */}
-        <div style={{
-          position: 'absolute', bottom: '12px', left: '16px',
-          display: 'flex', alignItems: 'center', gap: '16px',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#F97316', boxShadow: '0 0 8px rgba(249,115,22,0.8)' }}/>
-            <span style={{ fontFamily: 'monospace', fontSize: '8px', color: 'rgba(196,168,130,0.5)', letterSpacing: '0.12em' }}>ACTIVE CHAPTER</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <svg width="24" height="8" style={{ overflow: 'visible' }}>
-              <line x1="0" y1="4" x2="24" y2="4" stroke="rgba(249,115,22,0.4)" strokeWidth="1" strokeDasharray="3 3"/>
-            </svg>
-            <span style={{ fontFamily: 'monospace', fontSize: '8px', color: 'rgba(196,168,130,0.5)', letterSpacing: '0.12em' }}>COMPETITION LINK</span>
-          </div>
+          </>)}
         </div>
       </div>
     </div>
@@ -379,6 +311,11 @@ const css = `
   .cf-win:hover     { text-shadow: 0 0 60px rgba(249,115,22,0.8); filter: brightness(1.15); }
 
   .cf-compete, .cf-win { transition: color 0.2s ease, text-shadow 0.2s ease, filter 0.2s ease; }
+
+  @keyframes pr {
+    0%   { r: 8;  opacity: .65; }
+    100% { r: 22; opacity: 0;   }
+  }
 
   @keyframes cf-coming-soon-pulse {
     0%, 100% {
