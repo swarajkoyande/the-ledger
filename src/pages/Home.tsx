@@ -115,7 +115,7 @@ function Stat({ value, suffix = '', label }: { value: number; suffix?: string; l
   return (
     <div ref={ref} className="text-center">
       <div className="text-5xl font-black text-cream tabular-nums">{count}{suffix}</div>
-      <div className="text-stone text-sm font-light mt-2 tracking-wide">{label}</div>
+      <div className="text-black text-sm font-light mt-2 tracking-wide">{label}</div>
     </div>
   )
 }
@@ -573,7 +573,7 @@ export default function Home() {
 
       {/* ── MARQUEE 2 ─────────────────────────────────────────────────────── */}
       <div className="py-4" style={{ background: '#0A0806', borderTop: '1px solid rgba(245,240,232,0.04)' }}>
-        <MarqueeStrip items={['Tokyo', 'Singapore', 'Gold Coast', 'Madrid', 'Delhi', 'India']} reverse speed="35s" />
+        <MarqueeStrip items={['Tokyo', 'Singapore', 'Gold Coast', 'Madrid', 'Delhi', 'Gujarat', 'Tamil Nadu']} reverse speed="35s" />
       </div>
 
       {/* ── PRE-FOOTER CTA ────────────────────────────────────────────────── */}

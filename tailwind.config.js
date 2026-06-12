@@ -4,6 +4,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        navy: {
+          DEFAULT: '#0A1F44',
+          50:  '#d9e2ff',
+          100: '#b4c6f4',
+          200: '#7687b2',
+          300: '#4c5e86',
+          400: '#34466d',
+          500: '#0A1F44',
+          600: '#00081e',
+          dark: '#00081e',
+        },
+        ledger: {
+          bg:      '#f7f9fb',
+          surface: '#ffffff',
+          card:    '#eceef0',
+          border:  '#c5c6cf',
+          text:    '#191c1e',
+          muted:   '#44464e',
+          orange:  '#fd761a',
+          'orange-dark': '#9d4300',
+        },
         warm: {
           950: '#0A0806',
           900: '#0E0C09',

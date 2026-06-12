@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function MarqueeStrip({ items, reverse = false, speed = '50s', className = '' }: Props) {
-  const doubled = [...items, ...items]
+  const doubled = [...items, ...items, ...items, ...items]
   return (
     <div className={`overflow-hidden whitespace-nowrap select-none ${className}`}>
       <div
