@@ -124,7 +124,7 @@ function WorldMap() {
           viewBox={`0 0 ${MAP_W} ${MAP_H}`}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'all' }}
         >
-          {pins.map(pin => (
+          {pins.map((pin, i) => (
             <g
               key={pin.ch.id}
               transform={`translate(${pin.cx.toFixed(1)},${pin.cy.toFixed(1)})`}
@@ -132,53 +132,59 @@ function WorldMap() {
               onMouseEnter={() => handlePinEnter(pin)}
               onMouseLeave={() => setActiveChapter(null)}
             >
-              <circle r="8" fill="none" stroke="#f97316" strokeWidth="1.2"
-                style={{ opacity: activeChapter?.id === pin.ch.id ? 1 : 0,
-                         animation: activeChapter?.id === pin.ch.id ? 'pr 1.6s ease-out infinite' : 'none' }}
-              />
+              {/* Always-on pulse ring 1 */}
+              <circle r="4.5" fill="none" stroke="#f97316" strokeWidth="1.2">
+                <animate attributeName="r" values="4.5;20;4.5" dur="2.4s" begin={`${i * 0.6}s`} repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.7;0;0.7" dur="2.4s" begin={`${i * 0.6}s`} repeatCount="indefinite"/>
+              </circle>
+              {/* Always-on pulse ring 2 (staggered) */}
+              <circle r="4.5" fill="none" stroke="#f97316" strokeWidth="0.8">
+                <animate attributeName="r" values="4.5;20;4.5" dur="2.4s" begin={`${i * 0.6 + 1.2}s`} repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" begin={`${i * 0.6 + 1.2}s`} repeatCount="indefinite"/>
+              </circle>
+              {/* Core dot */}
               <circle r={activeChapter?.id === pin.ch.id ? 6 : 4.5} fill="#f97316"
                 style={{ transition: 'r 0.15s ease',
-                         filter: 'drop-shadow(0 0 6px rgba(249,115,22,0.8))' }}
+                         filter: 'drop-shadow(0 0 8px rgba(249,115,22,1)) drop-shadow(0 0 16px rgba(249,115,22,0.5))' }}
               />
             </g>
           ))}
         </svg>
 
-        {/* Hover card */}
-        <div
-          ref={cardRef}
-          style={{
-            position: 'absolute',
-            left: cardPos.left,
-            top: cardPos.top,
-            width: '230px',
-            background: '#1c1a16',
-            border: '0.5px solid rgba(249,115,22,0.3)',
-            borderRadius: '14px',
-            padding: '13px 15px',
-            pointerEvents: 'none',
-            zIndex: 20,
-            opacity: activeChapter ? 1 : 0,
-            transform: activeChapter
-              ? 'scaleX(1)'
-              : `scaleX(0.88)`,
-            transformOrigin: cardPos.flip ? 'right center' : 'left center',
-            transition: 'opacity 0.16s ease, transform 0.16s ease',
-          }}
-        >
-          {activeChapter && (<>
-            <div style={{ fontSize: '18px', marginBottom: '5px', lineHeight: 1 }}>{activeChapter.flag}</div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#f97316', marginBottom: '2px', fontFamily: '"Futura","Century Gothic",sans-serif' }}>{activeChapter.title}</div>
-            <div style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.4)', marginBottom: '7px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>{activeChapter.country}</div>
-            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: '9px', fontWeight: 300 }}>{activeChapter.desc}</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-              <span style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: activeChapter.tb, color: activeChapter.tc, border: `0.5px solid ${activeChapter.tbr}`, fontFamily: 'monospace' }}>{activeChapter.tag}</span>
-              {activeChapter.stats.map(s => (
-                <span key={s} style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '0.5px solid rgba(255,255,255,0.1)', fontFamily: 'monospace' }}>{s}</span>
-              ))}
-            </div>
-          </>)}
-        </div>
+      </div>
+
+      {/* Hover card — OUTSIDE overflow:hidden so it can extend beyond map bounds */}
+      <div
+        ref={cardRef}
+        style={{
+          position: 'absolute',
+          left: cardPos.left,
+          top: cardPos.top,
+          width: '230px',
+          background: '#1c1a16',
+          border: '0.5px solid rgba(249,115,22,0.3)',
+          borderRadius: '14px',
+          padding: '13px 15px',
+          pointerEvents: 'none',
+          zIndex: 20,
+          opacity: activeChapter ? 1 : 0,
+          transform: activeChapter ? 'scaleX(1)' : 'scaleX(0.88)',
+          transformOrigin: cardPos.flip ? 'right center' : 'left center',
+          transition: 'opacity 0.16s ease, transform 0.16s ease',
+        }}
+      >
+        {activeChapter && (<>
+          <div style={{ fontSize: '18px', marginBottom: '5px', lineHeight: 1 }}>{activeChapter.flag}</div>
+          <div style={{ fontSize: '13px', fontWeight: 700, color: '#f97316', marginBottom: '2px', fontFamily: '"Futura","Century Gothic",sans-serif' }}>{activeChapter.title}</div>
+          <div style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.4)', marginBottom: '7px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>{activeChapter.country}</div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: '9px', fontWeight: 300 }}>{activeChapter.desc}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+            <span style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: activeChapter.tb, color: activeChapter.tc, border: `0.5px solid ${activeChapter.tbr}`, fontFamily: 'monospace' }}>{activeChapter.tag}</span>
+            {activeChapter.stats.map(s => (
+              <span key={s} style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '0.5px solid rgba(255,255,255,0.1)', fontFamily: 'monospace' }}>{s}</span>
+            ))}
+          </div>
+        </>)}
       </div>
     </div>
   )
