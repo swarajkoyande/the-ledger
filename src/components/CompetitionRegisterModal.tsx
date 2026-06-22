@@ -8,7 +8,7 @@ const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null
 
-const SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbynIFhxOBsU4knxegN_OtZJ3uFEhTeCiKPBNsjLP57254Wq5odLH-zBMV-3YaSA29nx7A/exec'
+const SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwNSFm0f2YkUU-4gzlHXQKQvIpDSBDoA_dwN-AljiVKEiWq75WMl-f27MKN_He3ZbiBQA/exec'
 
 async function syncToSheet(data: Record<string, string>) {
   try {
