@@ -8,6 +8,19 @@ const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null
 
+const SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbynIFhxOBsU4knxegN_OtZJ3uFEhTeCiKPBNsjLP57254Wq5odLH-zBMV-3YaSA29nx7A/exec'
+
+async function syncToSheet(data: Record<string, string>) {
+  try {
+    await fetch(SHEETS_WEBHOOK, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  } catch {
+    // fire-and-forget — sheet sync failure does not block the user
+  }
+}
+
 interface Props {
   competition: 'economix' | 'ngya' | 'summit'
   competitionName: string
@@ -151,11 +164,12 @@ export default function CompetitionRegisterModal({ competition, competitionName,
       payload = { competition, ...genericForm }
     }
 
-    const { error } = await supabase.from('competition_registrations').insert(payload)
+    const { data: inserted, error } = await supabase.from('competition_registrations').insert(payload).select().single()
     if (error) {
       setErrorMsg(error.message)
       setStatus('error')
     } else {
+      syncToSheet({ ...payload, id: inserted?.id ?? '', created_at: inserted?.created_at ?? new Date().toISOString() })
       setStatus('success')
     }
   }
