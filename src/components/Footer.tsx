@@ -20,19 +20,24 @@ const LiIcon = () => (
 export default function Footer() {
   const [email, setEmail] = useState('')
   const [done, setDone] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
+    setError(false)
     try {
       const body = new URLSearchParams({ 'form-name': 'newsletter', email })
-      await fetch('/', {
+      const res = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
       })
-    } catch { /* show success regardless */ }
-    setDone(true)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      setDone(true)
+    } catch {
+      setError(true)
+    }
   }
 
   return (
@@ -92,6 +97,8 @@ export default function Footer() {
             <p className="text-stone text-sm font-light mb-4 leading-relaxed">Summits, competitions, network news.</p>
             {done ? (
               <p className="text-tan text-sm font-medium">You're on the list ✦</p>
+            ) : error ? (
+              <p className="text-red-400 text-sm font-light">Something went wrong — please try again.</p>
             ) : (
               <form onSubmit={handleNewsletter} className="space-y-2">
                 <input type="email" required value={email} onChange={e => setEmail(e.target.value)}

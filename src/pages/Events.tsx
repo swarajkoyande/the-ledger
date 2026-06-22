@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { Helmet } from 'react-helmet-async'
+import { ArrowRight, Lock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import CompetitionRegisterModal from '../components/CompetitionRegisterModal'
 
 // ── EVENT DATA — edit this array to update the page ──────────────────────────
 const events = [
@@ -194,6 +196,7 @@ export default function EventsPage() {
   const heroRef = useRef<HTMLElement>(null)
   const [mouse, setMouse] = useState({ x: -9999, y: -9999 })
   const [scrollY, setScrollY] = useState(0)
+  const [summitModalOpen, setSummitModalOpen] = useState(false)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = heroRef.current?.getBoundingClientRect()
@@ -209,6 +212,12 @@ export default function EventsPage() {
   }, [])
 
   return (
+    <>
+    <Helmet>
+      <title>Events — Competitions, Workshops & Networking | The Ledger</title>
+      <meta name="description" content="Upcoming finance and economics competitions, workshops, podcasts, and networking events for student clubs in The Ledger's global network." />
+      <link rel="canonical" href="https://theledger.online/events" />
+    </Helmet>
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -342,7 +351,7 @@ export default function EventsPage() {
                 color: '#C4A882',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                transform: 'rotate(-1.5deg)',
+                transform: 'rotate(0deg)',
                 display: 'inline-block',
                 fontFamily: '"Futura", "Century Gothic", sans-serif',
               }}>
@@ -372,7 +381,7 @@ export default function EventsPage() {
               fontWeight: 300,
               lineHeight: 1.75,
               marginBottom: '36px',
-              transform: 'rotate(-0.8deg)',
+              transform: 'rotate(0deg)',
               transformOrigin: 'left center',
               fontFamily: 'inherit',
             }}>
@@ -455,9 +464,87 @@ export default function EventsPage() {
               On the Calendar.
             </h2>
 
-            {/* Workshop card */}
+            {/* The Ledger Summit card */}
             <div
               style={{
+                borderRadius: '20px',
+                overflow: 'hidden',
+                background: 'rgba(255,255,255,0.03)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                border: '1px solid rgba(196,168,130,0.15)',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
+              }}
+            >
+              {/* Card header bar */}
+              <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(196,168,130,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: '8px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(196,168,130,0.9)', background: 'rgba(196,168,130,0.1)', border: '1px solid rgba(196,168,130,0.3)', padding: '4px 10px', borderRadius: '2px' }}>
+                    Summit
+                  </span>
+                  <span style={{ fontFamily: 'monospace', fontSize: '8px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(74,222,128,0.8)', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.2)', padding: '4px 10px', borderRadius: '2px' }}>
+                    ● Upcoming
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: '9px', color: '#C4A882', background: 'rgba(196,168,130,0.07)', border: '1px solid rgba(196,168,130,0.16)', padding: '5px 12px', borderRadius: '100px', letterSpacing: '0.1em' }}>
+                    📅 July 26, 2026
+                  </span>
+                  <span style={{ fontFamily: 'monospace', fontSize: '9px', color: '#C4A882', background: 'rgba(196,168,130,0.07)', border: '1px solid rgba(196,168,130,0.16)', padding: '5px 12px', borderRadius: '100px', letterSpacing: '0.1em' }}>
+                    📍 Tokyo · In-Person
+                  </span>
+                </div>
+              </div>
+
+              {/* Card body */}
+              <div className="p-7 sm:p-8">
+                <h3 style={{ fontFamily: '"Futura","Century Gothic",sans-serif', fontSize: 'clamp(1.25rem,2.5vw,1.75rem)', fontWeight: 900, color: '#F5F0E8', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '14px' }}>
+                  The Ledger Summit
+                </h3>
+                <p style={{ color: '#7A6B58', fontSize: '15px', fontWeight: 300, lineHeight: 1.75, maxWidth: '620px', marginBottom: '24px' }}>
+                  The flagship Ledger member event. The Summit opens the NGYA Economics Debate Championship, announces the EconomiX Case Competition finalists, and brings together Ledger members, guest speakers, and partners for an evening of networking and finance. Open to all Ledger members and guests.
+                </p>
+
+                {/* Highlight tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '28px' }}>
+                  {['🤝 Networking', '🎤 Guest Speakers', '🏆 EconomiX Finalist Announcements', '🎉 NGYA Debate Opening Ceremony', '🌏 All Ledger Members Welcome'].map(tag => (
+                    <span key={tag} style={{ fontFamily: 'monospace', fontSize: '9px', letterSpacing: '0.12em', color: 'rgba(196,168,130,0.75)', border: '1px solid rgba(196,168,130,0.18)', padding: '5px 12px', borderRadius: '100px' }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Locked register button */}
+                <button
+                  disabled
+                  title="Registration opening soon"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '14px 28px',
+                    fontFamily: '"Futura","Century Gothic",sans-serif',
+                    fontWeight: 900,
+                    fontSize: '11px',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(196,168,130,0.3)',
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '2px',
+                    cursor: 'not-allowed',
+                  }}
+                >
+                  <Lock size={12} style={{ opacity: 0.5 }} />
+                  Register — Opening Soon
+                </button>
+              </div>
+            </div>
+
+            {/* Finance Workshop card */}
+            <div
+              style={{
+                marginTop: '24px',
                 borderRadius: '20px',
                 overflow: 'hidden',
                 background: 'rgba(255,255,255,0.03)',
@@ -467,7 +554,6 @@ export default function EventsPage() {
                 boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
               }}
             >
-              {/* Card header bar */}
               <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(249,115,22,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ fontFamily: 'monospace', fontSize: '8px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(249,115,22,0.8)', background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.22)', padding: '4px 10px', borderRadius: '2px' }}>
@@ -479,15 +565,13 @@ export default function EventsPage() {
                 </div>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: 'monospace', fontSize: '9px', color: '#C4A882', background: 'rgba(196,168,130,0.07)', border: '1px solid rgba(196,168,130,0.16)', padding: '5px 12px', borderRadius: '100px', letterSpacing: '0.1em' }}>
-                    📅 26–27 July 2025
+                    📅 26–27 July 2026
                   </span>
                   <span style={{ fontFamily: 'monospace', fontSize: '9px', color: '#C4A882', background: 'rgba(196,168,130,0.07)', border: '1px solid rgba(196,168,130,0.16)', padding: '5px 12px', borderRadius: '100px', letterSpacing: '0.1em' }}>
                     📍 Tokyo · In-Person
                   </span>
                 </div>
               </div>
-
-              {/* Card body */}
               <div className="p-7 sm:p-8">
                 <h3 style={{ fontFamily: '"Futura","Century Gothic",sans-serif', fontSize: 'clamp(1.25rem,2.5vw,1.75rem)', fontWeight: 900, color: '#F5F0E8', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '14px' }}>
                   Finance, Economics &amp; Business Workshop
@@ -495,8 +579,6 @@ export default function EventsPage() {
                 <p style={{ color: '#7A6B58', fontSize: '15px', fontWeight: 300, lineHeight: 1.75, maxWidth: '620px', marginBottom: '24px' }}>
                   A two-day weekend intensive for high school students across The Ledger network. Build foundational knowledge in financial markets and macroeconomics, then advance into financial modelling, trading strategies, and a live stock pitch challenge. Includes guest speaker sessions, team case studies, and cross-school networking.
                 </p>
-
-                {/* Highlight tags */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '28px' }}>
                   {['🎤 Guest Speakers', '🤝 Team Collaboration', '📊 Financial Modelling', '🏆 Stock Pitch Challenge', '🌏 Cross-School Networking'].map(tag => (
                     <span key={tag} style={{ fontFamily: 'monospace', fontSize: '9px', letterSpacing: '0.12em', color: 'rgba(196,168,130,0.75)', border: '1px solid rgba(196,168,130,0.18)', padding: '5px 12px', borderRadius: '100px' }}>
@@ -504,8 +586,7 @@ export default function EventsPage() {
                     </span>
                   ))}
                 </div>
-
-                <a href="/workshop-register" className="ev-btn-primary" style={{ width: 'auto', display: 'inline-flex' }}>
+                <a href="/workshop-register" className="ev-btn-primary" style={{ display: 'inline-flex' }}>
                   Register Interest <ArrowRight size={13} />
                 </a>
               </div>
@@ -515,115 +596,6 @@ export default function EventsPage() {
         </FadeIn>
       </section>
 
-      {/* ── COMING SOON (removed) ────────────────────────────────────────────── */}
-      {false && <section className="relative overflow-hidden" style={{ background: '#F5F0E8', borderTop: '1px solid rgba(26,21,16,0.06)' }}>
-        {/* Grain texture */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.03\'/%3E%3C/svg%3E")',
-          backgroundSize: '180px 180px',
-          opacity: 0.5,
-        }} />
-
-        {/* Decorative ghost text background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none" style={{ zIndex: 0 }}>
-          <span style={{
-            fontSize: 'clamp(10rem, 40vw, 28rem)',
-            fontWeight: 900,
-            fontFamily: '"Futura","Century Gothic",sans-serif',
-            color: 'transparent',
-            WebkitTextStroke: '1px rgba(26,21,16,0.05)',
-            letterSpacing: '-0.04em',
-            lineHeight: 1,
-            whiteSpace: 'nowrap',
-          }}>
-            SOON
-          </span>
-        </div>
-
-        <FadeIn>
-          <div className="relative flex flex-col items-center justify-center text-center px-5 sm:px-8 py-32 sm:py-40" style={{ zIndex: 1 }}>
-
-            {/* Pulsing badge */}
-            <div className="ev-coming-soon-badge" style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontFamily: 'monospace',
-              fontSize: '9px',
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              color: 'rgba(249,115,22,0.7)',
-              background: 'rgba(249,115,22,0.06)',
-              border: '1px solid rgba(249,115,22,0.25)',
-              padding: '8px 18px',
-              borderRadius: '2px',
-              marginBottom: '32px',
-              animation: 'ev-coming-soon-pulse 2.6s ease-in-out infinite',
-            }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#F97316', display: 'inline-block', animation: 'ev-coming-soon-dot 2.6s ease-in-out infinite' }} />
-              [ EVENTS_CALENDAR ]
-            </div>
-
-            {/* Large heading */}
-            <h2 style={{
-              fontFamily: '"Futura","Century Gothic",sans-serif',
-              fontSize: 'clamp(3.5rem, 10vw, 8rem)',
-              fontWeight: 900,
-              color: '#1A1510',
-              letterSpacing: '-0.04em',
-              lineHeight: 0.9,
-              marginBottom: '12px',
-            }}>
-              COMING
-            </h2>
-            <h2 style={{
-              fontFamily: '"Futura","Century Gothic",sans-serif',
-              fontSize: 'clamp(3.5rem, 10vw, 8rem)',
-              fontWeight: 900,
-              color: '#F97316',
-              letterSpacing: '-0.04em',
-              lineHeight: 0.9,
-              marginBottom: '36px',
-              textShadow: '0 0 60px rgba(249,115,22,0.2)',
-            }}>
-              SOON.
-            </h2>
-
-            {/* Sub-copy */}
-            <p style={{
-              fontFamily: '"Futura","Century Gothic",sans-serif',
-              fontSize: '15px',
-              fontWeight: 300,
-              color: '#7A6B58',
-              lineHeight: 1.75,
-              maxWidth: '400px',
-              letterSpacing: '0.03em',
-            }}>
-              Competitions, networking nights, keynotes, and podcasts — the full event calendar is on its way.
-            </p>
-
-            {/* Category chips preview */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '32px' }}>
-              {['Competition', 'Networking', 'Speech', 'Podcast', 'Summit'].map(cat => (
-                <span key={cat} style={{
-                  fontFamily: 'monospace',
-                  fontSize: '9px',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(26,21,16,0.3)',
-                  border: '1px solid rgba(26,21,16,0.1)',
-                  padding: '5px 12px',
-                  borderRadius: '100px',
-                  textDecoration: 'line-through',
-                  textDecorationColor: 'rgba(26,21,16,0.15)',
-                }}>
-                  {cat}
-                </span>
-              ))}
-            </div>
-          </div>
-        </FadeIn>
-      </section>}
 
       {/* ── CTA ─────────────────────────────────────────────────────────────── */}
       <section style={{
@@ -657,5 +629,14 @@ export default function EventsPage() {
         </FadeIn>
       </section>
     </main>
+
+    {summitModalOpen && (
+      <CompetitionRegisterModal
+        competition="summit"
+        competitionName="The Ledger Summit"
+        onClose={() => setSummitModalOpen(false)}
+      />
+    )}
+    </>
   )
 }

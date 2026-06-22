@@ -1,0 +1,557 @@
+{
+  "source": "The Ledger App (Supabase project aa9f98a0-9e75-4ca0-ba62-a5abd65606a7)",
+  "totals": {
+    "courses": 10,
+    "subtopics": 71,
+    "lessons": 62,
+    "quizzes": 32,
+    "questions": 121,
+    "mcq": 118,
+    "calculation": 3,
+    "interactive_games": 13,
+    "knowledge_checks": 77
+  },
+  "game_type_totals": {
+    "scenario": 7,
+    "calculator": 4,
+    "drag-drop": 2
+  },
+  "data_quality_flags": [
+    "reading-financial-statements is an empty scaffold (9 subtopics, 0 lessons, 4 quizzes with 0 questions).",
+    "personal-finance-fundamentals > types-of-investment-accounts drag-drop has a malformed item (id '3,label:' with missing label).",
+    "Only 3 of 32 quizzes use the 'calculation' question type (the other 118 questions are MCQ).",
+    "Interactive games exist in only 3 of 10 courses (Personal Finance, Stock Market Essentials, Corporate Finance)."
+  ],
+  "catalog": [
+    {
+      "order": 1,
+      "slug": "personal-finance-fundamentals",
+      "title": "Personal Finance Fundamentals",
+      "category": "personal-finance",
+      "difficulty": "beginner",
+      "hours": 8,
+      "xp": 500,
+      "subtopics": 7,
+      "lessons": 7,
+      "quizzes": 3,
+      "games": "2 drag-drop, 2 calculator, 1 scenario",
+      "knowledge_checks": 15
+    },
+    {
+      "order": 2,
+      "slug": "stock-market-essentials",
+      "title": "Stock Market Essentials",
+      "category": "markets",
+      "difficulty": "beginner",
+      "hours": 10,
+      "xp": 750,
+      "subtopics": 5,
+      "lessons": 5,
+      "quizzes": 2,
+      "games": "5 scenario",
+      "knowledge_checks": 16
+    },
+    {
+      "order": 3,
+      "slug": "corporate-finance-deep-dive",
+      "title": "Corporate Finance Deep Dive",
+      "category": "corporate-finance",
+      "difficulty": "intermediate",
+      "hours": 12,
+      "xp": 1000,
+      "subtopics": 3,
+      "lessons": 3,
+      "quizzes": 1,
+      "games": "2 calculator, 1 scenario",
+      "knowledge_checks": 9
+    },
+    {
+      "order": 4,
+      "slug": "investment-banking",
+      "title": "Investment Banking",
+      "category": "investment-banking",
+      "difficulty": "advanced",
+      "hours": 15,
+      "xp": 1500,
+      "subtopics": 5,
+      "lessons": 5,
+      "quizzes": 2,
+      "games": "none",
+      "knowledge_checks": 2
+    },
+    {
+      "order": 5,
+      "slug": "private-equity-fundamentals",
+      "title": "Private Equity Fundamentals",
+      "category": "private-equity",
+      "difficulty": "advanced",
+      "hours": 12,
+      "xp": 1200,
+      "subtopics": 4,
+      "lessons": 4,
+      "quizzes": 2,
+      "games": "none",
+      "knowledge_checks": 2
+    },
+    {
+      "order": 6,
+      "slug": "ma-strategy-execution",
+      "title": "M&A Strategy and Execution",
+      "category": "ma",
+      "difficulty": "advanced",
+      "hours": 10,
+      "xp": 1100,
+      "subtopics": 5,
+      "lessons": 5,
+      "quizzes": 2,
+      "games": "none",
+      "knowledge_checks": 2
+    },
+    {
+      "order": 7,
+      "slug": "financial-institutions",
+      "title": "Financial Institutions",
+      "category": "markets",
+      "difficulty": "beginner",
+      "hours": 6,
+      "xp": 300,
+      "subtopics": 8,
+      "lessons": 8,
+      "quizzes": 3,
+      "games": "none",
+      "knowledge_checks": 31
+    },
+    {
+      "order": 8,
+      "slug": "business-101",
+      "title": "Business 101",
+      "category": "business",
+      "difficulty": "beginner",
+      "hours": 6,
+      "xp": 500,
+      "subtopics": 18,
+      "lessons": 18,
+      "quizzes": 6,
+      "games": "none",
+      "knowledge_checks": 0
+    },
+    {
+      "order": 100,
+      "slug": "leverage-trading-advanced",
+      "title": "Leverage Trading: The Advanced Playbook",
+      "category": "trading",
+      "difficulty": "intermediate",
+      "hours": 1,
+      "xp": 725,
+      "subtopics": 7,
+      "lessons": 7,
+      "quizzes": 7,
+      "games": "none",
+      "knowledge_checks": 0
+    },
+    {
+      "order": 101,
+      "slug": "reading-financial-statements",
+      "title": "Reading Financial Statements",
+      "category": "corporate-finance",
+      "difficulty": "intermediate",
+      "hours": 2,
+      "xp": 500,
+      "subtopics": 9,
+      "lessons": 0,
+      "quizzes": 4,
+      "games": "none",
+      "knowledge_checks": 0,
+      "status": "EMPTY SCAFFOLD: no lessons, quizzes have 0 questions"
+    }
+  ],
+  "course_1_full_detail": {
+    "category": "personal-finance",
+    "description": "Master the basics of budgeting, saving, taxation, and financial decision making.",
+    "difficulty": "beginner",
+    "display_order": 1,
+    "estimated_hours": 8,
+    "icon": "💰",
+    "id": "b0a71364-3232-4306-ac83-1769b8c0f26e",
+    "is_published": true,
+    "slug": "personal-finance-fundamentals",
+    "title": "Personal Finance Fundamentals",
+    "xp_reward": 500,
+    "subtopics": [
+      {
+        "slug": "saving-strategies",
+        "title": "Saving Strategies",
+        "display_order": 1,
+        "has_quiz_after": false,
+        "lesson_titles": [
+          "Saving Strategies for Wealth Building"
+        ],
+        "lesson_sections": [
+          "The 50/30/20 Budgeting Framework",
+          "Pay Yourself First and Automation",
+          "Building an Emergency Fund",
+          "Managing Lifestyle Creep"
+        ],
+        "games": [],
+        "knowledge_checks": 0,
+        "quizzes": []
+      },
+      {
+        "slug": "budgeting",
+        "title": "Budgeting",
+        "display_order": 2,
+        "has_quiz_after": true,
+        "lesson_titles": [
+          "Budgeting: The Foundation of Financial Control"
+        ],
+        "lesson_sections": [
+          "Understanding the Purpose of a Budget",
+          "Step 1: Income and Expense Analysis",
+          "Popular Budgeting Methods",
+          "Maintenance and Tracking"
+        ],
+        "games": [],
+        "knowledge_checks": 0,
+        "quizzes": [
+          {
+            "title": "Core Budgeting and Saving Mastery",
+            "covers": [
+              "saving-strategies",
+              "budgeting"
+            ],
+            "max_questions": 5,
+            "passing_score": 70,
+            "xp_reward": 50,
+            "question_types": {
+              "mcq": 4,
+              "calculation": 1
+            }
+          }
+        ]
+      },
+      {
+        "slug": "types-of-bank-accounts",
+        "title": "Types of Bank Accounts",
+        "display_order": 3,
+        "has_quiz_after": false,
+        "lesson_titles": [
+          "The Ultimate Home for Your Cash: Types of Bank Accounts"
+        ],
+        "lesson_sections": [
+          "1. The Transaction Hub: Checking Accounts",
+          "2. The Growth Engine: Savings Accounts",
+          "3. Interactive Simulation: The Money Matcher"
+        ],
+        "games": [
+          {
+            "type": "drag-drop",
+            "scenarioType": "allocation",
+            "xpReward": 500
+          }
+        ],
+        "knowledge_checks": 3,
+        "quizzes": []
+      },
+      {
+        "slug": "types-of-investment-accounts",
+        "title": "Types of Investment Accounts",
+        "display_order": 4,
+        "has_quiz_after": true,
+        "lesson_titles": [
+          "Choosing Your Investment Vaults"
+        ],
+        "lesson_sections": [
+          "1. The Flexible Brokerage Account",
+          "2. The Retirement Vaults",
+          "3. Match the Goal to the Account"
+        ],
+        "games": [
+          {
+            "type": "drag-drop",
+            "categorizationType": "investment-types",
+            "note": "DATA QUALITY: item id '3,label:' is malformed - missing label"
+          }
+        ],
+        "knowledge_checks": 3,
+        "quizzes": [
+          {
+            "title": "Investment Accounts Assessment",
+            "covers": [
+              "types-of-bank-accounts",
+              "types-of-investment-accounts"
+            ],
+            "max_questions": 5,
+            "passing_score": 70,
+            "xp_reward": 50,
+            "question_types": {
+              "mcq": 5
+            }
+          }
+        ]
+      },
+      {
+        "slug": "taxation",
+        "title": "Taxation",
+        "display_order": 5,
+        "has_quiz_after": false,
+        "lesson_titles": [
+          "Taxation and Personal Finance"
+        ],
+        "lesson_sections": [
+          "Gross Versus Net Income",
+          "Understanding Tax Brackets",
+          "Deductions and Credits"
+        ],
+        "games": [
+          {
+            "type": "calculator",
+            "calculationType": "tax-impact",
+            "fields": [
+              "salary",
+              "deduction"
+            ],
+            "xpReward": 100
+          }
+        ],
+        "knowledge_checks": 3,
+        "quizzes": []
+      },
+      {
+        "slug": "interest-and-tvm",
+        "title": "Interest and Time Value of Money",
+        "display_order": 6,
+        "has_quiz_after": false,
+        "lesson_titles": [
+          "Interest and Time Value of Money"
+        ],
+        "lesson_sections": [
+          "The Power of Now",
+          "Understanding Compound Returns",
+          "Projecting Future Value"
+        ],
+        "games": [
+          {
+            "type": "calculator",
+            "calculationType": "compound-interest",
+            "fields": [
+              "principal",
+              "monthlyContribution",
+              "rate",
+              "years"
+            ],
+            "xpReward": 100
+          }
+        ],
+        "knowledge_checks": 3,
+        "quizzes": []
+      },
+      {
+        "slug": "financial-decision-making",
+        "title": "Financial Decision Making",
+        "display_order": 7,
+        "has_quiz_after": true,
+        "lesson_titles": [
+          "Financial Decision Making"
+        ],
+        "lesson_sections": [
+          "Understanding Opportunity Cost",
+          "Frameworks for Rational Spending",
+          "Strategic Asset Allocation and Sunk Costs"
+        ],
+        "games": [
+          {
+            "type": "scenario",
+            "scenarioType": "general-decision",
+            "options": 3,
+            "xpReward": 100
+          }
+        ],
+        "knowledge_checks": 3,
+        "quizzes": [
+          {
+            "title": "Personal Finance Comprehensive Quiz",
+            "covers": [
+              "taxation",
+              "interest-and-tvm",
+              "financial-decision-making"
+            ],
+            "max_questions": 5,
+            "passing_score": 70,
+            "xp_reward": 50,
+            "question_types": {
+              "mcq": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "courses_2_to_10": {
+    "note": "Structural map for courses 2-10 (display_order 2..101). Lesson long-form prose and full quiz question text live in Supabase and are fetched by Claude Code at build time via the documented schema. Game configs are included verbatim because they are the interactive elements.",
+    "games_inventory": {
+      "stock-market-essentials": [
+        {
+          "subtopic": "intro-stock-market",
+          "type": "scenario",
+          "scenarioType": "decision-making",
+          "prompt": "$10,000 to begin investing in a volatile market; choose strategy",
+          "options": 3,
+          "correct": "Allocate across five sectors + Limit Order",
+          "xpReward": 100
+        },
+        {
+          "subtopic": "investment-pathways",
+          "type": "scenario",
+          "scenarioType": "investment-strategy",
+          "prompt": "$10,000 for 10yr, capture market growth + small alpha",
+          "options": 4,
+          "correct": "70% Index / 20% Sector ETF / 10% Individual (core-satellite)",
+          "xpReward": 100
+        },
+        {
+          "subtopic": "technical-fundamentals",
+          "type": "scenario",
+          "scenarioType": "decision-making",
+          "prompt": "Stock ranging $95-$110, now $108; best move",
+          "options": 3,
+          "correct": "Wait for pullback to ~$96 support",
+          "xpReward": 100
+        },
+        {
+          "subtopic": "charting",
+          "type": "scenario",
+          "scenarioType": "decision-making",
+          "prompt": "Stock ranging $140-$160, now $140; logical move",
+          "options": 3,
+          "correct": "Buy at $140 support, target $160",
+          "xpReward": 100
+        },
+        {
+          "subtopic": "basic-technical-analysis",
+          "type": "scenario",
+          "scenarioType": "decision-making",
+          "prompt": "Stock support $105 / resistance $120, now $118; lowest-risk entry",
+          "options": 3,
+          "correct": "Wait for drop to $105 support + tight stop-loss",
+          "xpReward": 100
+        }
+      ],
+      "corporate-finance-deep-dive": [
+        {
+          "subtopic": "financial-modelling",
+          "type": "calculator",
+          "calculationType": "valuation",
+          "fields": [
+            "revGrowth(slider -10..50)",
+            "ebitdaMargin(slider 5..40)",
+            "exitMultiple(slider 5..20)"
+          ],
+          "formula": "(100 * (1 + (revGrowth/100))^5) * (ebitdaMargin/100) * exitMultiple",
+          "resultLabel": "Projected Enterprise Value (Millions)",
+          "xpReward": 250
+        },
+        {
+          "subtopic": "corporate-structures",
+          "type": "scenario",
+          "scenarioType": "choice",
+          "prompt": "3 engineers, high-risk firm, $300k, protect homes + single taxation",
+          "options": 3,
+          "correct": "LLC",
+          "xpReward": 100
+        },
+        {
+          "subtopic": "return-on-investment",
+          "type": "calculator",
+          "calculationType": "roi",
+          "fields": [
+            "investmentCost(currency)",
+            "gainAmount(currency)"
+          ],
+          "resultLabel": "Calculated ROI Percentage",
+          "xpReward": 50
+        }
+      ]
+    },
+    "courses": [
+      {
+        "slug": "stock-market-essentials",
+        "games": "5 scenario",
+        "subtopic_count": 5,
+        "lessons_per_subtopic": 1,
+        "quizzes": 2,
+        "kc_total": 16,
+        "all_lessons_have_a_scenario_game": true
+      },
+      {
+        "slug": "corporate-finance-deep-dive",
+        "games": "2 calculator + 1 scenario",
+        "subtopic_count": 3,
+        "quizzes": 1,
+        "kc_total": 9
+      },
+      {
+        "slug": "investment-banking",
+        "games": "none (text + case studies)",
+        "subtopic_count": 5,
+        "quizzes": 2,
+        "kc_total": 2,
+        "notable": "M&A/IPO case studies subtopic: Disney-Fox, Kraft-Unilever, Airbnb IPO, Sprint-TMobile"
+      },
+      {
+        "slug": "private-equity-fundamentals",
+        "games": "none",
+        "subtopic_count": 4,
+        "quizzes": 2,
+        "kc_total": 2
+      },
+      {
+        "slug": "ma-strategy-execution",
+        "games": "none",
+        "subtopic_count": 5,
+        "quizzes": 2,
+        "kc_total": 2
+      },
+      {
+        "slug": "financial-institutions",
+        "games": "none",
+        "subtopic_count": 8,
+        "quizzes": 3,
+        "kc_total": 31,
+        "notable": "heavy inline knowledge checks (3-4 per lesson)"
+      },
+      {
+        "slug": "business-101",
+        "games": "none",
+        "subtopic_count": 18,
+        "quizzes": 6,
+        "kc_total": 0,
+        "structure": "6 modules x 3 lessons; single section per lesson; quiz after every 3rd subtopic (3 MCQ, 150 XP)",
+        "modules": [
+          "Foundations of Business",
+          "Startup Building",
+          "Business Strategy",
+          "Product Management",
+          "Finance for Founders",
+          "Growth & Scale"
+        ]
+      },
+      {
+        "slug": "leverage-trading-advanced",
+        "games": "none",
+        "subtopic_count": 7,
+        "quizzes": 7,
+        "kc_total": 0,
+        "structure": "7 modules, quiz after each (4 MCQ, 75% pass, 50 XP); crypto-context section in most lessons"
+      },
+      {
+        "slug": "reading-financial-statements",
+        "games": "none",
+        "subtopic_count": 9,
+        "lessons": 0,
+        "quizzes": 4,
+        "questions": 0,
+        "STATUS": "EMPTY SCAFFOLD - subtopics defined but no lesson content and quizzes have zero questions"
+      }
+    ]
+  }
+}

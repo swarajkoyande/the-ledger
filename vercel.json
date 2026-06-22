@@ -1,0 +1,7 @@
+{
+  "routes": [
+    { "src": "^/$", "dest": "/desktop.html" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/desktop.html" }
+  ]
+}

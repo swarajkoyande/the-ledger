@@ -18,6 +18,7 @@ export default function Navbar() {
   const location = useLocation()
   const scrolled = scrollY > 40
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setOpen(false); window.scrollTo(0, 0) }, [location.pathname])
   useEffect(() => { document.body.style.overflow = open ? 'hidden' : '' }, [open])
 

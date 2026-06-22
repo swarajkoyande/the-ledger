@@ -188,6 +188,34 @@
   /* ── Glow ─────────────────────────────────────────────────────── */
   .glow-orange { box-shadow: 0 0 50px rgba(249,115,22,0.25); }
   .glow-warm   { box-shadow: 0 0 50px rgba(196,168,130,0.15); }
+
+  /* ── App scrollbar utilities (used by lesson/trading/settings components) ── */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ── Safe-area padding (gracefully no-ops on desktop where inset = 0) ── */
+  .pb-safe    { padding-bottom: calc(env(safe-area-inset-bottom) + 14px); }
+  .pb-safe-lg { padding-bottom: calc(env(safe-area-inset-bottom) + 28px); }
+
+  /* ── Glass surface tokens (used by lesson / compete components) ─────── */
+  .glass-surface {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .glass-surface--strong {
+    background: rgba(245, 245, 247, 0.75);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .glass-surface { background: rgba(245, 245, 247, 0.95); }
+    .glass-surface--strong { background: rgba(245, 245, 247, 0.98); }
+  }
 }
 
 @keyframes marquee {
@@ -205,3 +233,35 @@
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* ─── Liquid Glass Utilities ───────────────────────────── */
+.lg-panel {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 4px 16px rgba(10,31,68,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.lg-dark {
+  background: rgba(10,31,68,0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.lg-nav {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border-top: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 -8px 32px rgba(10,31,68,0.08);
+}
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+.lg-orb { animation: floatOrb 8s ease-in-out infinite; }
+.lg-orb-2 { animation: floatOrb 11s ease-in-out infinite reverse; }
+.lg-input::placeholder { color: rgba(255,255,255,0.38); }
+.lg-input:focus { outline: none; }

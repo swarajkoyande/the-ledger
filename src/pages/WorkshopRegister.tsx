@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 
@@ -142,6 +143,10 @@ export default function WorkshopRegisterPage() {
   }
 
   return (
+    <>
+    <Helmet>
+      <meta name="robots" content="noindex, nofollow" />
+    </Helmet>
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -332,5 +337,6 @@ export default function WorkshopRegisterPage() {
         </div>
       </section>
     </main>
+    </>
   )
 }

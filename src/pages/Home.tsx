@@ -1,26 +1,21 @@
 import { useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import { MarqueeStrip } from '../components/Marquee'
 import { useInView } from '../hooks/useInView'
 import { useCountUp } from '../hooks/useCountUp'
-import { useScrollY } from '../hooks/useScrollY'
-
 // ── Background orbs for liquid glass hero ─────────────────────────────────────
 function HeroOrbs() {
-  const scrollY = useScrollY()
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
       {/* Large warm orange orb */}
-      <div className="absolute -top-20 -left-32 w-[500px] h-[500px] rounded-full bg-orange/12 blur-[120px] animate-orb-1"
-        style={{ transform: `translateY(${scrollY * 0.15}px)` }} />
+      <div className="absolute -top-20 -left-32 w-[500px] h-[500px] rounded-full bg-orange/12 blur-[120px] animate-orb-1" />
       {/* Tan/cream orb */}
-      <div className="absolute top-1/3 right-0 w-[400px] h-[400px] rounded-full bg-tan/10 blur-[100px] animate-orb-2"
-        style={{ transform: `translateY(${scrollY * 0.08}px)` }} />
+      <div className="absolute top-1/3 right-0 w-[400px] h-[400px] rounded-full bg-tan/10 blur-[100px] animate-orb-2" />
       {/* Small stone orb */}
-      <div className="absolute bottom-0 left-1/3 w-[300px] h-[300px] rounded-full bg-stone/8 blur-[80px] animate-orb-3"
-        style={{ transform: `translateY(${scrollY * 0.12}px)` }} />
+      <div className="absolute bottom-0 left-1/3 w-[300px] h-[300px] rounded-full bg-stone/8 blur-[80px] animate-orb-3" />
       {/* Cream accent */}
       <div className="absolute top-1/2 left-1/2 w-[200px] h-[200px] rounded-full bg-cream/3 blur-[60px] animate-orb-4" />
       {/* Grid pattern */}
@@ -120,23 +115,6 @@ function Stat({ value, suffix = '', label }: { value: number; suffix?: string; l
   )
 }
 
-// ── Testimonial ───────────────────────────────────────────────────────────────
-function Quote({ text, name, school, delay }: { text: string; name: string; school: string; delay: number }) {
-  return (
-    <FadeIn delay={delay} direction="up">
-      <div className="glass rounded-2xl p-7 card-hover h-full flex flex-col" style={{ minHeight: 160 }}>
-        <div className="text-orange/30 text-5xl font-black leading-none mb-3 select-none">"</div>
-        <p className="text-stone font-light text-base leading-relaxed flex-1 italic">{text}</p>
-        <div className="mt-5">
-          <p className="text-cream text-sm font-semibold">{name}</p>
-          {/* PLACEHOLDER — replace with real student details */}
-          <p className="text-stone text-xs font-light mt-0.5">{school}</p>
-        </div>
-      </div>
-    </FadeIn>
-  )
-}
-
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 const faqItems = [
   {
@@ -226,26 +204,14 @@ const marqueeItems = [
   'Connect With Industry Leaders',
 ]
 
-const testimonials = [
-  {
-    text: "It created opportunities that turned into real outcomes. The Ledger isn't just a club — it's a career catalyst.",
-    name: 'Yuki Tanaka',
-    school: 'Keio Academy, Tokyo',
-  },
-  {
-    text: "The network made global connections feel intentional, not random. I've met people I'll know for life.",
-    name: 'Priya Sharma',
-    school: 'Dhirubhai Ambani International School, Mumbai',
-  },
-  {
-    text: "We've built long-term partnerships through this network. The competitions are challenging in the best way.",
-    name: 'Carlos Mendez',
-    school: 'Colegio San Patricio, Madrid',
-  },
-]
-
 export default function Home() {
   return (
+    <>
+    <Helmet>
+      <title>The Ledger — Student Finance & Economics Network</title>
+      <meta name="description" content="Free student-led finance and economics network across Tokyo, Singapore, Mumbai, Delhi, Gold Coast, and Madrid. Learn markets, pitch stocks, compete, and connect." />
+      <link rel="canonical" href="https://theledger.online/" />
+    </Helmet>
     <main>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center pt-[68px] overflow-hidden" style={{ background: '#0E0C09' }}>
@@ -558,19 +524,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ──────────────────────────────────────────────────── */}
-      <section className="py-24 relative overflow-hidden" style={{ background: '#141108' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
-          <FadeIn className="text-center mb-14">
-            <p className="text-tan text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">In Their Words</p>
-            <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-black text-cream">What members say.</h2>
-          </FadeIn>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {testimonials.map((t, i) => <Quote key={i} text={t.text} name={t.name} school={t.school} delay={i * 100} />)}
-          </div>
-        </div>
-      </section>
-
       {/* ── MARQUEE 2 ─────────────────────────────────────────────────────── */}
       <div className="py-4" style={{ background: '#0A0806', borderTop: '1px solid rgba(245,240,232,0.04)' }}>
         <MarqueeStrip items={['Tokyo', 'Singapore', 'Gold Coast', 'Madrid', 'Delhi', 'Gujarat', 'Tamil Nadu']} reverse speed="35s" />
@@ -606,5 +559,6 @@ export default function Home() {
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <FAQ />
     </main>
+    </>
   )
 }

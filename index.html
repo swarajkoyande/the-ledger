@@ -20,7 +20,6 @@
     <meta name="twitter:title" content="The Ledger — Finance & Economics Network for Ambitious Students" />
     <meta name="twitter:description" content="Free student-led finance and economics network across Tokyo, Singapore, Mumbai, Delhi, Gold Coast, and Madrid." />
     <meta name="twitter:image" content="https://theledger.online/og-image.jpg" />
-    <link rel="canonical" href="https://theledger.online/" />
     <meta name="robots" content="index, follow" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,18 +27,21 @@
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "The Ledger",
-  "url": "https://theledger.online/",
-  "description": "Free student-led finance and economics network across Tokyo, Singapore, Mumbai, Delhi, Gold Coast, and Madrid.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": {
-      "@type": "EntryPoint",
-      "urlTemplate": "https://theledger.online/search?q={search_term_string}"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "The Ledger",
+      "url": "https://theledger.online/"
     },
-    "query-input": "required name=search_term_string"
-  }
+    {
+      "@type": "Organization",
+      "name": "The Ledger",
+      "url": "https://theledger.online/",
+      "logo": "https://theledger.online/favicon-512.png",
+      "description": "Free student-led finance and economics network across Tokyo, Singapore, Mumbai, Delhi, Gold Coast, and Madrid.",
+      "sameAs": []
+    }
+  ]
 }
 </script>
   </head>
@@ -63,6 +65,13 @@
     </form>
     <form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
       <input name="bot-field" /><input name="email" />
+    </form>
+    <form name="workshop-register-interest" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="fullName" /><input name="email" />
+      <input name="school" /><input name="yearLevel" />
+      <input name="city" /><input name="country" />
+      <input name="hearAboutUs" /><textarea name="notes"></textarea>
     </form>
   </body>
 </html>

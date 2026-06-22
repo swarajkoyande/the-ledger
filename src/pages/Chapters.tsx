@@ -1,7 +1,128 @@
 import { useState, useRef, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
-import { ArrowRight, MapPin } from 'lucide-react'
+import { ArrowRight, MapPin, ChevronDown } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import * as d3 from 'd3'
+import * as topojson from 'topojson-client'
+
+// ── WORLD MAP ─────────────────────────────────────────────────────────────────
+const MAP_W = 1000, MAP_H = 500
+
+const MAP_CHAPTERS = [
+  { id: 'tokyo',     lon: 139.69, lat: 35.69,  flag: '🇯🇵', title: 'Tokyo',      country: 'Japan',
+    tag: 'Founding Chapter', tc: '#f97316', tb: 'rgba(249,115,22,0.1)', tbr: 'rgba(249,115,22,0.28)',
+    stats: ['35+ Members', '7 Schools'],
+    desc: 'Our flagship chapter — weekly market discussions, live trading simulations, and a growing alumni network spanning the city.' },
+  { id: 'india',     lon: 78.96,  lat: 20.59,  flag: '🇮🇳', title: 'India',      country: 'Delhi · Tamil Nadu · Gujarat',
+    tag: 'Expanding Fast', tc: '#4ade80', tb: 'rgba(74,222,128,0.08)', tbr: 'rgba(74,222,128,0.2)',
+    stats: ['3 Regions', 'Since 2024'],
+    desc: "The Ledger's most ambitious expansion — Delhi, Tamil Nadu, Gujarat — meeting the demand for applied financial education." },
+  { id: 'madrid',    lon: -3.70,  lat: 40.42,  flag: '🇪🇸', title: 'Madrid',     country: 'Spain',
+    tag: 'European Hub', tc: '#C4A882', tb: 'rgba(196,168,130,0.08)', tbr: 'rgba(196,168,130,0.22)',
+    stats: ['EU Chapter', 'Active'],
+    desc: "The Ledger's European home. Market deep-dives, case competitions, and discussions on Europe's evolving economic landscape." },
+  { id: 'goldcoast', lon: 153.43, lat: -28.02, flag: '🇦🇺', title: 'Gold Coast', country: 'Australia',
+    tag: 'Fintech Focus', tc: '#818cf8', tb: 'rgba(129,140,248,0.08)', tbr: 'rgba(129,140,248,0.2)',
+    stats: ['Fintech', 'Active'],
+    desc: 'Where finance meets technology. Algorithmic trading, fintech models, and how software is reshaping capital markets.' },
+]
+
+type MapChapter = typeof MAP_CHAPTERS[number]
+type PinPos = { ch: MapChapter; cx: number; cy: number }
+
+function WorldMap() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const svgRef    = useRef<SVGSVGElement>(null)
+  const wrapRef   = useRef<HTMLDivElement>(null)
+  const cardRef   = useRef<HTMLDivElement>(null)
+  const [activeChapter, setActiveChapter] = useState<MapChapter | null>(null)
+  const [cardPos, setCardPos] = useState({ left: 0, top: 0, flip: false })
+  const [pins, setPins] = useState<PinPos[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const W = MAP_W, H = MAP_H
+    canvas.width = W; canvas.height = H
+    const ctx = canvas.getContext('2d')!
+    ctx.fillStyle = '#0d0c0a'; ctx.fillRect(0, 0, W, H)
+    ;(async () => {
+      const world = await fetch('https://unpkg.com/world-atlas@2/countries-110m.json').then(r => r.json())
+      if (cancelled) return
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const land = topojson.feature(world as Parameters<typeof topojson.feature>[0], (world as any).objects.land)
+      const off = document.createElement('canvas'); off.width = W; off.height = H
+      const oc = off.getContext('2d')!
+      const proj = d3.geoEquirectangular().scale(H / Math.PI).translate([W / 2, H / 2])
+      oc.fillStyle = '#fff'; oc.beginPath(); d3.geoPath(proj, oc)(land); oc.fill()
+      const pix = oc.getImageData(0, 0, W, H).data
+      const isLand = (x: number, y: number) => { const i = (Math.round(y) * W + Math.round(x)) * 4; return i >= 0 && i < pix.length && pix[i] > 100 }
+      const SP = 7, R = 2.5
+      ctx.fillStyle = 'rgba(160,155,148,0.55)'
+      for (let y = SP / 2; y < H; y += SP)
+        for (let x = SP / 2; x < W; x += SP)
+          if (isLand(x, y)) { ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2); ctx.fill() }
+      const computed: PinPos[] = MAP_CHAPTERS.map(ch => { const [cx, cy] = proj([ch.lon, ch.lat]) as [number, number]; return { ch, cx, cy } })
+      if (!cancelled) setPins(computed)
+    })()
+    return () => { cancelled = true }
+  }, [])
+
+  const handlePinEnter = (pin: PinPos) => {
+    const wrap = wrapRef.current, card = cardRef.current
+    if (!wrap || !card) return
+    const mapW = wrap.offsetWidth, mapH = wrap.offsetHeight
+    const CW = 234, GAP = 14
+    const pinX = pin.cx * (mapW / MAP_W), pinY = pin.cy * (mapH / MAP_H)
+    const goRight = pinX + GAP + CW < mapW - 4
+    const left = goRight ? pinX + GAP : pinX - GAP - CW
+    const cardH = card.offsetHeight || 175
+    let top = pinY - cardH / 2
+    if (top < 4) top = 4
+    if (top + cardH > mapH + 60) top = mapH + 60 - cardH
+    setCardPos({ left, top, flip: !goRight })
+    setActiveChapter(pin.ch)
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div ref={wrapRef} style={{ position: 'relative', background: '#0d0c0a', borderRadius: '16px', overflow: 'hidden', minHeight: '200px' }}>
+        <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: 'auto' }} />
+        <svg ref={svgRef} viewBox={`0 0 ${MAP_W} ${MAP_H}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'all' }}>
+          {pins.map((pin, i) => (
+            <g key={pin.ch.id} transform={`translate(${pin.cx.toFixed(1)},${pin.cy.toFixed(1)})`} style={{ cursor: 'pointer' }}
+              onMouseEnter={() => handlePinEnter(pin)} onMouseLeave={() => setActiveChapter(null)}>
+              <circle r="4.5" fill="none" stroke="#f97316" strokeWidth="1.2">
+                <animate attributeName="r" values="4.5;20;4.5" dur="2.4s" begin={`${i * 0.6}s`} repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.7;0;0.7" dur="2.4s" begin={`${i * 0.6}s`} repeatCount="indefinite"/>
+              </circle>
+              <circle r="4.5" fill="none" stroke="#f97316" strokeWidth="0.8">
+                <animate attributeName="r" values="4.5;20;4.5" dur="2.4s" begin={`${i * 0.6 + 1.2}s`} repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" begin={`${i * 0.6 + 1.2}s`} repeatCount="indefinite"/>
+              </circle>
+              <circle r={activeChapter?.id === pin.ch.id ? 6 : 4.5} fill="#f97316"
+                style={{ transition: 'r 0.15s ease', filter: 'drop-shadow(0 0 8px rgba(249,115,22,1)) drop-shadow(0 0 16px rgba(249,115,22,0.5))' }} />
+            </g>
+          ))}
+        </svg>
+      </div>
+      <div ref={cardRef} style={{ position: 'absolute', left: cardPos.left, top: cardPos.top, width: '230px', background: '#1c1a16', border: '0.5px solid rgba(249,115,22,0.3)', borderRadius: '14px', padding: '13px 15px', pointerEvents: 'none', zIndex: 20, opacity: activeChapter ? 1 : 0, transform: activeChapter ? 'scaleX(1)' : 'scaleX(0.88)', transformOrigin: cardPos.flip ? 'right center' : 'left center', transition: 'opacity 0.16s ease, transform 0.16s ease' }}>
+        {activeChapter && (<>
+          <div style={{ fontSize: '18px', marginBottom: '5px', lineHeight: 1 }}>{activeChapter.flag}</div>
+          <div style={{ fontSize: '13px', fontWeight: 700, color: '#f97316', marginBottom: '2px', fontFamily: '"Futura","Century Gothic",sans-serif' }}>{activeChapter.title}</div>
+          <div style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.4)', marginBottom: '7px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>{activeChapter.country}</div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: '9px', fontWeight: 300 }}>{activeChapter.desc}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+            <span style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: activeChapter.tb, color: activeChapter.tc, border: `0.5px solid ${activeChapter.tbr}`, fontFamily: 'monospace' }}>{activeChapter.tag}</span>
+            {activeChapter.stats.map(s => <span key={s} style={{ fontSize: '9.5px', padding: '2px 8px', borderRadius: '99px', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '0.5px solid rgba(255,255,255,0.1)', fontFamily: 'monospace' }}>{s}</span>)}
+          </div>
+        </>)}
+      </div>
+    </div>
+  )
+}
 
 const chapters = [
   {
@@ -87,6 +208,7 @@ export default function ChaptersPage() {
   const heroRef = useRef<HTMLElement>(null)
   const [mouse, setMouse] = useState({ x: -9999, y: -9999 })
   const [scrollY, setScrollY] = useState(0)
+  const [openCard, setOpenCard] = useState<string | null>(null)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = heroRef.current?.getBoundingClientRect()
@@ -102,6 +224,12 @@ export default function ChaptersPage() {
   }, [])
 
   return (
+    <>
+    <Helmet>
+      <title>Chapters — Student Finance Clubs Worldwide | The Ledger</title>
+      <meta name="description" content="Find The Ledger student finance and economics chapters in Tokyo, India, Madrid, Gold Coast, and more. Join a local chapter or start one at your school." />
+      <link rel="canonical" href="https://theledger.online/chapters" />
+    </Helmet>
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -235,7 +363,7 @@ export default function ChaptersPage() {
                 color: '#C4A882',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                transform: 'rotate(-1.5deg)',
+                transform: 'rotate(0deg)',
                 display: 'inline-block',
                 fontFamily: '"Futura", "Century Gothic", sans-serif',
               }}>
@@ -265,7 +393,7 @@ export default function ChaptersPage() {
               fontWeight: 300,
               lineHeight: 1.75,
               marginBottom: '36px',
-              transform: 'rotate(-0.8deg)',
+              transform: 'rotate(0deg)',
               transformOrigin: 'left center',
               fontFamily: 'inherit',
             }}>
@@ -330,91 +458,74 @@ export default function ChaptersPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER CARDS ─────────────────────────────────────────────────── */}
-      <section className="relative py-16 pb-28 overflow-hidden" style={{ background: '#0E0C09' }}>
-        {/* Subtle background orbs for cards section */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(249,115,22,0.05) 0%, transparent 65%)', animation: 'ch-orb-drift 20s ease-in-out infinite' }} />
-          <div style={{ position: 'absolute', bottom: '0', left: '-80px', width: '500px', height: '400px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(196,168,130,0.04) 0%, transparent 65%)', animation: 'ch-orb-drift 25s ease-in-out infinite reverse' }} />
-        </div>
-
-        {/* Section eyebrow */}
+      {/* ── WORLD MAP ─────────────────────────────────────────────────────── */}
+      <section style={{ background: '#0E0C09', paddingBottom: '0' }}>
         <FadeIn>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 mb-10">
-            <div style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(249,115,22,0.65)', letterSpacing: '0.28em' }}>
-              [ ACTIVE_CHAPTERS ]
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 pb-0">
+            <div style={{ marginBottom: '24px' }}>
+              <p style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(249,115,22,0.65)', letterSpacing: '0.28em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                [ GLOBAL_FOOTPRINT ]
+              </p>
+              <h2 style={{ fontFamily: '"Futura","Century Gothic",sans-serif', fontSize: 'clamp(1.6rem,3vw,2.4rem)', fontWeight: 900, color: '#F5F0E8', letterSpacing: '-0.02em', marginBottom: '8px' }}>
+                Where we are
+              </h2>
+              <p style={{ fontSize: '14px', color: '#6B5E50', fontWeight: 300, lineHeight: 1.7, maxWidth: '460px' }}>
+                Four cities. Six countries. One network building the next generation of financially literate leaders.
+              </p>
             </div>
+            <WorldMap />
           </div>
         </FadeIn>
+      </section>
 
-        <div className="relative max-w-6xl mx-auto px-5 sm:px-8 space-y-5">
-          {chapters.map((ch, i) => (
-            <FadeIn key={ch.city} delay={i * 80} direction="up">
-              <div
-                style={{
-                  borderRadius: '20px',
-                  overflow: 'hidden',
-                  background: 'rgba(255,255,255,0.03)',
-                  backdropFilter: 'blur(24px)',
-                  WebkitBackdropFilter: 'blur(24px)',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                  boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
-                }}
-              >
-                <div className="grid md:grid-cols-[260px_1fr]">
-                  {/* Left panel */}
+      {/* ── CHAPTER CARDS ─────────────────────────────────────────────────── */}
+      <section style={{ background: '#0E0C09', padding: '20px 0 80px' }}>
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+          <p style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(249,115,22,0.65)', letterSpacing: '0.28em', marginBottom: '24px' }}>[ ACTIVE_CHAPTERS ]</p>
+          <div className="space-y-3">
+            {chapters.map((ch, i) => {
+              const isOpen = openCard === ch.city
+              return (
+                <FadeIn key={ch.city} delay={i * 80} direction="up">
                   <div
-                    className="p-8 flex flex-col justify-between gap-6"
                     style={{
-                      background: 'rgba(249,115,22,0.04)',
-                      borderRight: '1px solid rgba(255,255,255,0.06)',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      background: isOpen ? 'rgba(249,115,22,0.05)' : 'rgba(255,255,255,0.03)',
+                      border: isOpen ? '1px solid rgba(249,115,22,0.2)' : '1px solid rgba(255,255,255,0.07)',
+                      boxShadow: isOpen ? '0 8px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(249,115,22,0.08)' : '0 4px 20px rgba(0,0,0,0.2)',
+                      transition: 'background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+                      cursor: 'pointer',
                     }}
+                    onClick={() => setOpenCard(isOpen ? null : ch.city)}
                   >
-                    <div>
-                      <div className="text-5xl mb-4">{ch.flag}</div>
-                      <h2
-                        className="text-3xl font-black mb-1 ch-futura"
-                        style={{ color: '#F5F0E8' }}
-                      >
-                        {ch.city}
-                      </h2>
-                      <div className="flex items-center gap-1.5 text-xs font-light mb-4" style={{ color: '#6B5E50' }}>
-                        <MapPin size={11} />{ch.country}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '20px 28px', flexWrap: 'wrap' }}>
+                      <div style={{ fontSize: '2rem', lineHeight: 1, flexShrink: 0 }}>{ch.flag}</div>
+                      <div style={{ minWidth: '140px' }}>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#F5F0E8', fontFamily: '"Futura","Century Gothic",sans-serif', lineHeight: 1.1 }}>{ch.city}</div>
+                        <div style={{ fontSize: '11px', color: '#6B5E50', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={10} />{ch.country}</div>
                       </div>
-                      <span
-                        className="inline-flex text-[11px] font-semibold px-3 py-1 rounded-full"
-                        style={ch.tagStyle}
-                      >
-                        {ch.tag}
-                      </span>
+                      <span style={{ fontSize: '10.5px', fontWeight: 600, padding: '3px 11px', borderRadius: '99px', whiteSpace: 'nowrap', ...ch.tagStyle }}>{ch.tag}</span>
+                      <div style={{ display: 'flex', gap: '24px', marginLeft: 'auto' }}>
+                        {ch.stats.map(s => (
+                          <div key={s.l} style={{ textAlign: 'center' }}>
+                            <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#F97316', lineHeight: 1 }}>{s.v}</div>
+                            <div style={{ fontSize: '10px', color: '#6B5E50', fontWeight: 300, marginTop: '2px', letterSpacing: '0.04em' }}>{s.l}</div>
+                          </div>
+                        ))}
+                      </div>
+                      <ChevronDown size={16} style={{ color: isOpen ? '#F97316' : '#4A3F35', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1), color 0.2s ease', flexShrink: 0 }} />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {ch.stats.map(s => (
-                        <div
-                          key={s.l}
-                          className="rounded-xl p-3 text-center"
-                          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
-                        >
-                          <div className="font-black text-xl" style={{ color: '#F97316' }}>{s.v}</div>
-                          <div className="text-[11px] font-light mt-0.5" style={{ color: '#6B5E50' }}>{s.l}</div>
-                        </div>
-                      ))}
+                    <div style={{ maxHeight: isOpen ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
+                      <div style={{ padding: '0 28px 28px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                        <p style={{ fontSize: '16px', color: '#9A8B7A', fontWeight: 300, lineHeight: 1.8, paddingTop: '22px' }}>{ch.desc}</p>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Right panel */}
-                  <div className="p-8 md:p-10 flex items-center">
-                    <p
-                      className="font-light text-lg leading-relaxed"
-                      style={{ color: '#9A8B7A' }}
-                    >
-                      {ch.desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
-          ))}
+                </FadeIn>
+              )
+            })}
+          </div>
         </div>
       </section>
 
@@ -440,5 +551,6 @@ export default function ChaptersPage() {
         </FadeIn>
       </section>
     </main>
+    </>
   )
 }

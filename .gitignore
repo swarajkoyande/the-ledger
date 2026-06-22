@@ -26,3 +26,9 @@ release-assets/
 
 # Local Netlify folder
 .netlify
+
+# Environment variables (never commit secrets)
+.env
+.env.local
+.env.*.local
+.vercel

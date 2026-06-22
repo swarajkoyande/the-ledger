@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { ArrowRight, Building2, Globe2, CheckCircle2, Loader2 } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 
@@ -12,6 +13,80 @@ function useForm(init: FV) {
 }
 
 const regions = ['Tokyo, Japan', 'Singapore', 'Gold Coast, Australia', 'Madrid, Spain', 'Delhi, India', 'Tamil Nadu, India', 'Gujarat, India', 'Other']
+
+const countryCodes = [
+  { code: '+1',   label: '🇺🇸 +1' },
+  { code: '+1-CA', label: '🇨🇦 +1' },
+  { code: '+7',   label: '🇷🇺 +7' },
+  { code: '+20',  label: '🇪🇬 +20' },
+  { code: '+27',  label: '🇿🇦 +27' },
+  { code: '+30',  label: '🇬🇷 +30' },
+  { code: '+31',  label: '🇳🇱 +31' },
+  { code: '+32',  label: '🇧🇪 +32' },
+  { code: '+33',  label: '🇫🇷 +33' },
+  { code: '+34',  label: '🇪🇸 +34' },
+  { code: '+39',  label: '🇮🇹 +39' },
+  { code: '+40',  label: '🇷🇴 +40' },
+  { code: '+41',  label: '🇨🇭 +41' },
+  { code: '+43',  label: '🇦🇹 +43' },
+  { code: '+44',  label: '🇬🇧 +44' },
+  { code: '+45',  label: '🇩🇰 +45' },
+  { code: '+46',  label: '🇸🇪 +46' },
+  { code: '+47',  label: '🇳🇴 +47' },
+  { code: '+48',  label: '🇵🇱 +48' },
+  { code: '+49',  label: '🇩🇪 +49' },
+  { code: '+51',  label: '🇵🇪 +51' },
+  { code: '+52',  label: '🇲🇽 +52' },
+  { code: '+54',  label: '🇦🇷 +54' },
+  { code: '+55',  label: '🇧🇷 +55' },
+  { code: '+56',  label: '🇨🇱 +56' },
+  { code: '+57',  label: '🇨🇴 +57' },
+  { code: '+60',  label: '🇲🇾 +60' },
+  { code: '+61',  label: '🇦🇺 +61' },
+  { code: '+62',  label: '🇮🇩 +62' },
+  { code: '+63',  label: '🇵🇭 +63' },
+  { code: '+64',  label: '🇳🇿 +64' },
+  { code: '+65',  label: '🇸🇬 +65' },
+  { code: '+66',  label: '🇹🇭 +66' },
+  { code: '+81',  label: '🇯🇵 +81' },
+  { code: '+82',  label: '🇰🇷 +82' },
+  { code: '+84',  label: '🇻🇳 +84' },
+  { code: '+86',  label: '🇨🇳 +86' },
+  { code: '+90',  label: '🇹🇷 +90' },
+  { code: '+91',  label: '🇮🇳 +91' },
+  { code: '+92',  label: '🇵🇰 +92' },
+  { code: '+94',  label: '🇱🇰 +94' },
+  { code: '+95',  label: '🇲🇲 +95' },
+  { code: '+98',  label: '🇮🇷 +98' },
+  { code: '+212', label: '🇲🇦 +212' },
+  { code: '+213', label: '🇩🇿 +213' },
+  { code: '+216', label: '🇹🇳 +216' },
+  { code: '+220', label: '🇬🇲 +220' },
+  { code: '+221', label: '🇸🇳 +221' },
+  { code: '+234', label: '🇳🇬 +234' },
+  { code: '+254', label: '🇰🇪 +254' },
+  { code: '+256', label: '🇺🇬 +256' },
+  { code: '+260', label: '🇿🇲 +260' },
+  { code: '+263', label: '🇿🇼 +263' },
+  { code: '+351', label: '🇵🇹 +351' },
+  { code: '+352', label: '🇱🇺 +352' },
+  { code: '+353', label: '🇮🇪 +353' },
+  { code: '+358', label: '🇫🇮 +358' },
+  { code: '+370', label: '🇱🇹 +370' },
+  { code: '+380', label: '🇺🇦 +380' },
+  { code: '+420', label: '🇨🇿 +420' },
+  { code: '+421', label: '🇸🇰 +421' },
+  { code: '+852', label: '🇭🇰 +852' },
+  { code: '+853', label: '🇲🇴 +853' },
+  { code: '+886', label: '🇹🇼 +886' },
+  { code: '+966', label: '🇸🇦 +966' },
+  { code: '+971', label: '🇦🇪 +971' },
+  { code: '+972', label: '🇮🇱 +972' },
+  { code: '+973', label: '🇧🇭 +973' },
+  { code: '+974', label: '🇶🇦 +974' },
+  { code: '+977', label: '🇳🇵 +977' },
+  { code: '+994', label: '🇦🇿 +994' },
+]
 
 async function netlifySubmit(formName: string, values: FV) {
   const body = new URLSearchParams({ 'form-name': formName, ...values })
@@ -162,7 +237,7 @@ function SuccessBanner({ title, sub }: { title: string; sub: string }) {
 
 export default function RegisterPage() {
   const club = useForm({ clubName: '', schoolName: '', contactName: '', email: '', country: '', members: '', about: '' })
-  const head = useForm({ fullName: '', email: '', region: '', school: '', background: '', motivation: '' })
+  const head = useForm({ fullName: '', email: '', phoneCode: '+81', phone: '', region: '', school: '', background: '', motivation: '' })
 
   const [clubDone, setClubDone] = useState(false)
   const [clubLoading, setClubLoading] = useState(false)
@@ -218,6 +293,12 @@ export default function RegisterPage() {
   }
 
   return (
+    <>
+    <Helmet>
+      <title>Register Your Club — Join The Ledger Network</title>
+      <meta name="description" content="Register your school finance or economics club with The Ledger. Connect with a global student network across Asia, Europe, and Australia — free to join." />
+      <link rel="canonical" href="https://theledger.online/register" />
+    </Helmet>
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -351,7 +432,7 @@ export default function RegisterPage() {
                 color: '#C4A882',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                transform: 'rotate(-1.5deg)',
+                transform: 'rotate(0deg)',
                 display: 'inline-block',
                 fontFamily: '"Futura", "Century Gothic", sans-serif',
               }}>
@@ -381,7 +462,7 @@ export default function RegisterPage() {
               fontWeight: 300,
               lineHeight: 1.75,
               marginBottom: '36px',
-              transform: 'rotate(-0.8deg)',
+              transform: 'rotate(0deg)',
               transformOrigin: 'left center',
               fontFamily: 'inherit',
             }}>
@@ -398,7 +479,7 @@ export default function RegisterPage() {
             animation: 'rg-word-in 0.5s ease 0.6s forwards',
           }}>
             <div style={{ fontSize: '9px', color: '#3A3028', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: '4px', fontFamily: 'monospace' }}>Chapters</div>
-            <div style={{ fontSize: '3.5rem', fontWeight: 900, color: '#F97316', lineHeight: 1, textShadow: '0 0 30px rgba(249,115,22,0.4)' }}>15+</div>
+            <div style={{ fontSize: '3.5rem', fontWeight: 900, color: '#F97316', lineHeight: 1, textShadow: '0 0 30px rgba(249,115,22,0.4)' }}>6</div>
           </div>
 
           {/* Decorative ghost "R" */}
@@ -439,7 +520,7 @@ export default function RegisterPage() {
                 letterSpacing: '0.22em',
                 paddingRight: '48px',
               }}>
-                JOIN THE LEDGER &nbsp;·&nbsp; REGISTER YOUR CLUB &nbsp;·&nbsp; APPLY AS REGIONAL HEAD &nbsp;·&nbsp; 15+ CHAPTERS &nbsp;·&nbsp; 6 COUNTRIES &nbsp;·&nbsp; $0 TO JOIN &nbsp;·&nbsp; GLOBAL STUDENT NETWORK &nbsp;·&nbsp;
+                JOIN THE LEDGER &nbsp;·&nbsp; REGISTER YOUR CLUB &nbsp;·&nbsp; APPLY AS REGIONAL HEAD &nbsp;·&nbsp; 6 CHAPTERS &nbsp;·&nbsp; 6 COUNTRIES &nbsp;·&nbsp; $0 TO JOIN &nbsp;·&nbsp; GLOBAL STUDENT NETWORK &nbsp;·&nbsp;
               </span>
             ))}
           </div>
@@ -450,7 +531,7 @@ export default function RegisterPage() {
       <FadeIn>
         <section style={{ background: '#0E0C09', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-5 flex flex-wrap items-center justify-center gap-3 sm:gap-8 text-center">
-            {['70+ students in the network', '15+ active chapters', '6 countries', '3 competitions in 2025–26'].map((stat, i, arr) => (
+            {['70+ students in the network', '6 active chapters', '6 countries', '3 competitions in 2025–26'].map((stat, i, arr) => (
               <span key={stat} className="flex items-center gap-4">
                 <span style={{ color: '#C4A882', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', fontFamily: '"Futura","Century Gothic",sans-serif' }}>{stat}</span>
                 {i < arr.length - 1 && <span style={{ color: 'rgba(255,255,255,0.08)', fontSize: '18px' }}>·</span>}
@@ -524,7 +605,7 @@ export default function RegisterPage() {
                   <SuccessBanner title="Application Received!" sub="We'll review your registration and reach out within a few days with next steps." />
                 ) : (
                   <form onSubmit={handleClubSubmit} className="space-y-4">
-                    <input type="hidden" name="bot-field" />
+                    <input name="bot-field" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label className="rg-lbl">Club Name *</label>
@@ -626,7 +707,7 @@ export default function RegisterPage() {
                   <SuccessBanner title="Application Submitted!" sub="We review every application carefully and will be in touch soon." />
                 ) : (
                   <form onSubmit={handleHeadSubmit} className="space-y-4">
-                    <input type="hidden" name="bot-field" />
+                    <input name="bot-field" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
                     <div>
                       <label className="rg-lbl">Full Name *</label>
                       <input type="text" name="fullName" required value={head.values.fullName} onChange={head.onChange} placeholder="Your full name" className="rg-inp" />
@@ -636,11 +717,35 @@ export default function RegisterPage() {
                       <input type="email" name="email" required value={head.values.email} onChange={head.onChange} placeholder="you@email.com" className="rg-inp" />
                     </div>
                     <div>
+                      <label className="rg-lbl">Phone Number *</label>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <select
+                          name="phoneCode"
+                          required
+                          value={head.values.phoneCode}
+                          onChange={head.onChange}
+                          className="rg-inp"
+                          style={{ width: '130px', flexShrink: 0, cursor: 'pointer' }}
+                        >
+                          {countryCodes.map(c => (
+                            <option key={c.code} value={c.code}>{c.label}</option>
+                          ))}
+                        </select>
+                        <input
+                          type="tel"
+                          name="phone"
+                          required
+                          value={head.values.phone}
+                          onChange={head.onChange}
+                          placeholder="90 1234 5678"
+                          className="rg-inp"
+                          style={{ flex: 1 }}
+                        />
+                      </div>
+                    </div>
+                    <div>
                       <label className="rg-lbl">Region You Want to Lead *</label>
-                      <select name="region" required value={head.values.region} onChange={head.onChange} className="rg-inp" style={{ cursor: 'pointer', appearance: 'none' as React.CSSProperties['appearance'] }}>
-                        <option value="">Select a region…</option>
-                        {regions.map(r => <option key={r} value={r}>{r}</option>)}
-                      </select>
+                      <input name="region" type="text" required value={head.values.region} onChange={head.onChange} placeholder="e.g. Tokyo, Japan" className="rg-inp" />
                     </div>
                     <div>
                       <label className="rg-lbl">Current School / University *</label>
@@ -698,5 +803,6 @@ export default function RegisterPage() {
         </FadeIn>
       </section>
     </main>
+    </>
   )
 }

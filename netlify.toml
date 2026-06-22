@@ -31,6 +31,25 @@
   status = 301
   force = true
 
+# Legacy app-page slugs → /app
+[[redirects]]
+  from = "/download"
+  to = "https://theledger.online/app"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ledger-app"
+  to = "https://theledger.online/app"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ledger-app-1"
+  to = "https://theledger.online/app"
+  status = 301
+  force = true
+
 # ── SPA catch-all (must be last) ────────────────────────────────────────────
 [[redirects]]
   from = "/*"
@@ -45,6 +64,38 @@
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-XSS-Protection = "1; mode=block"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://unpkg.com; frame-ancestors 'none'"
+
+# ── Noindex headers for design-variant & form-only pages ────────────────────
+[[headers]]
+  for = "/competitions-avant"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/competitions-futuristic"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/competitions-motion"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/competitions-minimal"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/competitions-final"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/workshop-register"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
 
 # ── Cache headers for static assets ────────────────────────────────────────
 [[headers]]

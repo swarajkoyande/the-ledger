@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { ArrowRight, Download, Globe, Monitor, Apple, Clock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import { DOWNLOAD_URLS } from '../config/downloads'
@@ -153,7 +154,7 @@ function PhoneCarousel() {
       <div ref={scrollRef} onScroll={handleScroll}
         className="lg:hidden -mx-5 sm:-mx-8 overflow-x-auto snap-x snap-mandatory flex scrollbar-hide"
         style={{ WebkitOverflowScrolling: 'touch' }}>
-        {previewScreens.map((screen, i) => (
+        {previewScreens.map((screen) => (
           <div key={screen.label}
             className="snap-center flex-shrink-0 flex flex-col items-center px-4"
             style={{ width: '100vw' }}>
@@ -182,6 +183,12 @@ function PhoneCarousel() {
 
 export default function AppPage() {
   return (
+    <>
+    <Helmet>
+      <title>Download The Ledger App — Finance Education for Students</title>
+      <meta name="description" content="Download The Ledger app for iOS and macOS. Access finance lessons, stock pitch tools, and connect with student investors across our global network." />
+      <link rel="canonical" href="https://theledger.online/app" />
+    </Helmet>
     <main>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex items-center pt-[68px] overflow-hidden" style={{ background: '#0E0C09' }}>
@@ -441,5 +448,6 @@ export default function AppPage() {
         </FadeIn>
       </section>
     </main>
+    </>
   )
 }
