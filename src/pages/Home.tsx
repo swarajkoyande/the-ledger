@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import { MarqueeStrip } from '../components/Marquee'
+import BorderGlow from '../components/BorderGlow'
 import { useInView } from '../hooks/useInView'
 import { useCountUp } from '../hooks/useCountUp'
 // ── Background orbs for liquid glass hero ─────────────────────────────────────
@@ -354,7 +355,7 @@ export default function Home() {
       </section>
 
       {/* ── GLASS BENTO FEATURES ──────────────────────────────────────────── */}
-      <section className="py-28 sm:py-36 relative overflow-hidden" style={{ background: '#141108' }}>
+      <section className="py-28 sm:py-36 relative overflow-x-hidden" style={{ background: '#141108' }}>
         <div className="absolute left-1/4 top-0 w-96 h-96 rounded-full bg-orange/6 blur-[100px] pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
           <FadeIn className="text-center mb-16">
@@ -372,8 +373,8 @@ export default function Home() {
 
             {/* CONNECT — tall left */}
             <FadeIn delay={0} direction="up" className="lg:row-span-2">
-              <div className="glass rounded-3xl p-8 card-hover h-full flex flex-col relative overflow-hidden"
-                style={{ minHeight: 340, border: '1px solid rgba(249,115,22,0.15)' }}>
+              <BorderGlow animated glowColor="24 95 53" colors={['#f97316', '#c4a882', '#92400e']} className="h-full card-hover">
+              <div className="p-8 flex flex-col h-full relative" style={{ minHeight: 340 }}>
                 <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-orange/8 blur-3xl pointer-events-none" />
                 <div className="relative">
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-orange"
@@ -389,12 +390,13 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+              </BorderGlow>
             </FadeIn>
 
             {/* LEARN */}
             <FadeIn delay={100} direction="up">
-              <div className="glass rounded-3xl p-8 card-hover relative overflow-hidden"
-                style={{ border: '1px solid rgba(196,168,130,0.12)' }}>
+              <BorderGlow animated glowColor="36 35 63" colors={['#c4a882', '#f97316', '#78350f']} className="card-hover">
+              <div className="p-8 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-tan/8 blur-3xl pointer-events-none" />
                 <div className="relative">
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-tan"
@@ -410,34 +412,36 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+              </BorderGlow>
             </FadeIn>
 
             {/* COMPETE */}
             <FadeIn delay={200} direction="up">
-              <div className="glass rounded-3xl p-8 card-hover relative overflow-hidden"
-                style={{ border: '1px solid rgba(74,222,128,0.12)' }}>
+              <BorderGlow animated glowColor="24 95 53" colors={['#f97316', '#fbbf24', '#92400e']} className="card-hover">
+              <div className="p-8 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl pointer-events-none"
-                  style={{ background: 'rgba(74,222,128,0.06)' }} />
+                  style={{ background: 'rgba(249,115,22,0.06)' }} />
                 <div className="relative">
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6"
-                    style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)', color: '#4ade80' }}>
+                    style={{ background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.15)', color: '#f97316' }}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
                       <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-2" style={{ color: '#4ade80' }}>Compete</p>
+                  <p className="text-orange text-[10px] font-bold uppercase tracking-[0.2em] mb-2">Compete</p>
                   <h3 className="text-cream text-2xl font-bold leading-tight mb-3">Real trades. Real stakes. Real growth.</h3>
                   <p className="text-stone font-light leading-relaxed text-sm">
                     Execute live simulations, track your portfolio, climb the global leaderboard. Competition here is about discipline and measurable growth.
                   </p>
                 </div>
               </div>
+              </BorderGlow>
             </FadeIn>
 
             {/* Wide stats card */}
             <FadeIn delay={150} direction="up" className="lg:col-span-2">
-              <div className="glass-warm rounded-3xl p-8 card-hover"
-                style={{ border: '1px solid rgba(196,168,130,0.10)' }}>
+              <BorderGlow animated glowColor="36 35 63" colors={['#c4a882', '#f97316', '#78350f']} className="card-hover">
+              <div className="p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                   <div>
                     <p className="text-tan text-[10px] font-semibold uppercase tracking-[0.2em] mb-2">The Ledger Network</p>
@@ -454,6 +458,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              </BorderGlow>
             </FadeIn>
           </div>
         </div>

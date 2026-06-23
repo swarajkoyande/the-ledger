@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { ArrowRight, MapPin, ChevronDown } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import BorderGlow from '../components/BorderGlow'
 import * as d3 from 'd3'
 import * as topojson from 'topojson-client'
 
@@ -26,6 +27,14 @@ const MAP_CHAPTERS = [
     tag: 'Fintech Focus', tc: '#818cf8', tb: 'rgba(129,140,248,0.08)', tbr: 'rgba(129,140,248,0.2)',
     stats: ['Fintech', 'Active'],
     desc: 'Where finance meets technology. Algorithmic trading, fintech models, and how software is reshaping capital markets.' },
+  { id: 'newyork',   lon: -74.01, lat: 40.71,  flag: '🇺🇸', title: 'New York',   country: 'United States',
+    tag: 'Western Hemisphere', tc: '#f97316', tb: 'rgba(249,115,22,0.1)', tbr: 'rgba(249,115,22,0.28)',
+    stats: ['Active', 'EST'],
+    desc: "The financial capital of the Western world — and The Ledger's first foothold in North America. Built for Wall Street ambition." },
+  { id: 'calgary',   lon: -114.07, lat: 51.05, flag: '🇨🇦', title: 'Calgary',    country: 'Canada',
+    tag: 'Western Hemisphere', tc: '#f97316', tb: 'rgba(249,115,22,0.1)', tbr: 'rgba(249,115,22,0.28)',
+    stats: ['Active', 'MST'],
+    desc: "Canada's energy capital and a rising hub for finance and entrepreneurship. Calgary brings a frontier ambition to The Ledger network." },
 ]
 
 type MapChapter = typeof MAP_CHAPTERS[number]
@@ -148,6 +157,18 @@ const chapters = [
     tag: 'Fintech Focus', tagStyle: { color: '#818cf8', background: 'rgba(129,140,248,0.08)', border: '1px solid rgba(129,140,248,0.18)' },
     stats: [{ v: 'Fintech', l: 'Focus' }, { v: 'Active', l: 'Status' }],
     desc: 'Where finance meets technology. Gold Coast members pull apart fintech models, explore algorithmic trading, and understand how software is reshaping capital markets. The most technically focused chapter in the network — and proud of it.',
+  },
+  {
+    city: 'New York', country: 'United States', flag: '🇺🇸',
+    tag: 'Western Hemisphere', tagStyle: { color: '#F97316', background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.2)' },
+    stats: [{ v: 'Active', l: 'Status' }, { v: 'EST', l: 'Region' }],
+    desc: 'New York is the financial capital of the Western world — and The Ledger\'s first foothold in North America. A chapter rooted in Wall Street culture: rigorous, ambitious, and relentlessly focused on markets. The first stepping stone of the Western Hemisphere.',
+  },
+  {
+    city: 'Calgary', country: 'Canada', flag: '🇨🇦',
+    tag: 'Western Hemisphere', tagStyle: { color: '#F97316', background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.2)' },
+    stats: [{ v: 'Active', l: 'Status' }, { v: 'MST', l: 'Region' }],
+    desc: 'Calgary is Canada\'s energy capital and one of its fastest-growing hubs for finance, entrepreneurship, and innovation. The Ledger\'s Canadian chapter brings the same rigour and competitive edge that defines the network globally — to the heart of the Western frontier. The Western Hemisphere expansion continues.',
   },
 ]
 
@@ -398,8 +419,8 @@ export default function ChaptersPage() {
               fontFamily: 'inherit',
             }}>
               Tokyo · Delhi · Madrid · Gold Coast.<br />
-              The Ledger is building a generation of<br />
-              financially literate leaders — one chapter at a time.
+              New York · Toronto — next.<br />
+              The Ledger is building a generation of financially literate leaders — one chapter at a time.
             </p>
           </div>
 
@@ -451,7 +472,7 @@ export default function ChaptersPage() {
                 letterSpacing: '0.22em',
                 paddingRight: '48px',
               }}>
-                TOKYO &nbsp;·&nbsp; DELHI &nbsp;·&nbsp; MADRID &nbsp;·&nbsp; GOLD COAST &nbsp;·&nbsp; 4 CHAPTERS &nbsp;·&nbsp; 6 COUNTRIES &nbsp;·&nbsp; FOUNDED 2023 &nbsp;·&nbsp; GROWING FAST &nbsp;·&nbsp; APPLY NOW &nbsp;·&nbsp;
+                TOKYO &nbsp;·&nbsp; DELHI &nbsp;·&nbsp; MADRID &nbsp;·&nbsp; GOLD COAST &nbsp;·&nbsp; NEW YORK &nbsp;·&nbsp; TORONTO &nbsp;·&nbsp; 6 CHAPTERS &nbsp;·&nbsp; 7 COUNTRIES &nbsp;·&nbsp; FOUNDED 2023 &nbsp;·&nbsp; GROWING FAST &nbsp;·&nbsp; APPLY NOW &nbsp;·&nbsp;
               </span>
             ))}
           </div>
@@ -470,7 +491,7 @@ export default function ChaptersPage() {
                 Where we are
               </h2>
               <p style={{ fontSize: '14px', color: '#6B5E50', fontWeight: 300, lineHeight: 1.7, maxWidth: '460px' }}>
-                Four cities. Six countries. One network building the next generation of financially literate leaders.
+                Six chapters. Seven countries. One network — and the Western Hemisphere is next.
               </p>
             </div>
             <WorldMap />
@@ -487,15 +508,18 @@ export default function ChaptersPage() {
               const isOpen = openCard === ch.city
               return (
                 <FadeIn key={ch.city} delay={i * 80} direction="up">
+                  <BorderGlow
+                    borderRadius={16}
+                    animated
+                    glowColor="24 95 53"
+                    colors={['#f97316', '#c4a882', '#92400e']}
+                    backgroundColor="#0E0C09"
+                  >
                   <div
                     style={{
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      background: isOpen ? 'rgba(249,115,22,0.05)' : 'rgba(255,255,255,0.03)',
-                      border: isOpen ? '1px solid rgba(249,115,22,0.2)' : '1px solid rgba(255,255,255,0.07)',
-                      boxShadow: isOpen ? '0 8px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(249,115,22,0.08)' : '0 4px 20px rgba(0,0,0,0.2)',
-                      transition: 'background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
                       cursor: 'pointer',
+                      transition: 'background 0.25s ease',
+                      background: isOpen ? 'rgba(249,115,22,0.04)' : 'transparent',
                     }}
                     onClick={() => setOpenCard(isOpen ? null : ch.city)}
                   >
@@ -522,6 +546,7 @@ export default function ChaptersPage() {
                       </div>
                     </div>
                   </div>
+                  </BorderGlow>
                 </FadeIn>
               )
             })}

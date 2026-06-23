@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { ArrowRight, Lock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import BorderGlow from '../components/BorderGlow'
 import { useState, useEffect, useRef } from 'react'
 import CompetitionRegisterModal from '../components/CompetitionRegisterModal'
 // ── QUARTERLY AUTO-DETECTION ──────────────────────────────────────────────────
@@ -563,17 +564,8 @@ export default function Competitions() {
             const s = statusStyle[comp.status] || statusStyle['Closed']
             return (
               <FadeIn key={comp.name} delay={i * 80} direction="up">
-                <div
-                  style={{
-                    borderRadius: '20px',
-                    overflow: 'hidden',
-                    background: 'rgba(255,255,255,0.03)',
-                    backdropFilter: 'blur(24px)',
-                    WebkitBackdropFilter: 'blur(24px)',
-                    border: '1px solid rgba(255,255,255,0.07)',
-                    boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
-                  }}
-                >
+                <BorderGlow animated glowColor="24 95 53" colors={['#f97316', '#c4a882', '#92400e']} borderRadius={20} backgroundColor="#0E0C09">
+                <div>
                   <div className="grid md:grid-cols-[260px_1fr]">
                     {/* Left panel — darker glass */}
                     <div
@@ -686,6 +678,7 @@ export default function Competitions() {
                     </div>
                   </div>
                 </div>
+                </BorderGlow>
               </FadeIn>
             )
           })}

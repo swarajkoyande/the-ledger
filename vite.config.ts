@@ -22,6 +22,7 @@ export default defineConfig({
       input: {
         main:    resolve(__dirname, 'index.html'),
         desktop: resolve(__dirname, 'desktop.html'),
+        app:     resolve(__dirname, 'app.html'),
       },
     },
   },

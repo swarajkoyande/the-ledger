@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { ArrowRight, Lock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import BorderGlow from '../components/BorderGlow'
 import CompetitionRegisterModal from '../components/CompetitionRegisterModal'
 
 // ── EVENT DATA — edit this array to update the page ──────────────────────────
@@ -464,18 +465,9 @@ export default function EventsPage() {
               On the Calendar.
             </h2>
 
-            {/* The Ledger Summit card */}
-            <div
-              style={{
-                borderRadius: '20px',
-                overflow: 'hidden',
-                background: 'rgba(255,255,255,0.03)',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
-                border: '1px solid rgba(196,168,130,0.15)',
-                boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
-              }}
-            >
+            <FadeIn direction="up">
+            <BorderGlow animated glowColor="36 35 63" colors={['#c4a882', '#f97316', '#78350f']} borderRadius={20} backgroundColor="#0E0C09">
+            <div>
               {/* Card header bar */}
               <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(196,168,130,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -540,20 +532,14 @@ export default function EventsPage() {
                 </button>
               </div>
             </div>
+            </BorderGlow>
+            </FadeIn>
 
-            {/* Finance Workshop card */}
-            <div
-              style={{
-                marginTop: '24px',
-                borderRadius: '20px',
-                overflow: 'hidden',
-                background: 'rgba(255,255,255,0.03)',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
-              }}
-            >
+            <div style={{ height: '32px' }} />
+
+            <FadeIn direction="up" delay={100}>
+            <BorderGlow animated glowColor="24 95 53" colors={['#f97316', '#c4a882', '#92400e']} borderRadius={20} backgroundColor="#0E0C09">
+            <div>
               <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(249,115,22,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ fontFamily: 'monospace', fontSize: '8px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(249,115,22,0.8)', background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.22)', padding: '4px 10px', borderRadius: '2px' }}>
@@ -591,6 +577,8 @@ export default function EventsPage() {
                 </a>
               </div>
             </div>
+            </BorderGlow>
+            </FadeIn>
 
           </div>
         </FadeIn>
