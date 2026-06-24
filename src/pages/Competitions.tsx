@@ -643,7 +643,7 @@ export default function Competitions() {
                       ) : (comp as any).isEconomiX ? (
                         <RegistrationActions
                           target={(comp as any).registrationOpen}
-                          onRegister={() => setRegisterModal('economix')}
+                          onRegister={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSczGqspgdDt1y0Jh5HukNfnNOTfoNZP94iuTgThR7vb1LwWHg/viewform?usp=publish-editor', '_blank')}
                         />
                       ) : (comp as any).isNGYA ? (
                         <RegistrationActions
