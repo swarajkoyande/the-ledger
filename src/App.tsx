@@ -15,6 +15,7 @@ const CompetitionsMotion    = lazy(() => import('./pages/CompetitionsMotion'))
 const CompetitionsMinimal   = lazy(() => import('./pages/CompetitionsMinimal'))
 const CompetitionsFinal     = lazy(() => import('./pages/CompetitionsFinal'))
 const WorkshopRegister      = lazy(() => import('./pages/WorkshopRegister'))
+const NotFound              = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   return (
@@ -39,7 +40,7 @@ export default function App() {
           <Route path="/download"    element={<Navigate to="/app" replace />} />
           <Route path="/ledger-app"  element={<Navigate to="/app" replace />} />
           <Route path="/ledger-app-1" element={<Navigate to="/app" replace />} />
-          <Route path="*"            element={<Navigate to="/" replace />} />
+          <Route path="*"            element={<NotFound />} />
         </Routes>
       </Suspense>
       <Footer />

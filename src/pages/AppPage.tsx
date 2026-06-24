@@ -188,6 +188,7 @@ export default function AppPage() {
       <title>Download The Ledger App — Finance Education for Students</title>
       <meta name="description" content="Download The Ledger app for iOS and macOS. Access finance lessons, stock pitch tools, and connect with student investors across our global network." />
       <link rel="canonical" href="https://theledger.online/app" />
+      <meta name="robots" content="noindex, nofollow" />
     </Helmet>
     <main>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
