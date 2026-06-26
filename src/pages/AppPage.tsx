@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Helmet } from 'react-helmet-async'
+import { Seo } from '../components/Seo'
 import { ArrowRight, Download, Globe, Monitor, Apple, Clock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import { DOWNLOAD_URLS } from '../config/downloads'
@@ -184,12 +184,21 @@ function PhoneCarousel() {
 export default function AppPage() {
   return (
     <>
-    <Helmet>
-      <title>Download The Ledger App — Finance Education for Students</title>
-      <meta name="description" content="Download The Ledger app for iOS and macOS. Access finance lessons, stock pitch tools, and connect with student investors across our global network." />
-      <link rel="canonical" href="https://theledger.online/app" />
-      <meta name="robots" content="noindex, nofollow" />
-    </Helmet>
+    <Seo
+      title="The Ledger App — Finance Education for Students"
+      description="Download The Ledger app for iOS and macOS. Access finance lessons, stock pitch tools, and connect with student investors across our global network."
+      path="/app"
+      jsonLd={{
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'The Ledger App',
+        applicationCategory: 'EducationApplication',
+        operatingSystem: 'iOS, macOS',
+        description: 'Finance lessons, stock pitch tools, and a global student investor network.',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        publisher: { '@type': 'Organization', name: 'The Ledger', url: 'https://theledger.online/' },
+      }}
+    />
     <main>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex items-center pt-[68px] overflow-hidden" style={{ background: '#0E0C09' }}>

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Helmet } from 'react-helmet-async'
+import { Seo } from '../components/Seo'
 import { ArrowRight, Lock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import BorderGlow from '../components/BorderGlow'
@@ -88,6 +88,29 @@ const events = [
     status: 'Past',
   },
 ]
+// ─────────────────────────────────────────────────────────────────────────────
+
+
+// ── EVENT SCHEMA — derived from the events data above ────────────────────────
+const eventsJsonLd = events.map(e => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: e.title,
+  description: e.desc,
+  startDate: new Date(e.date).toISOString().slice(0, 10),
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: {
+    '@type': 'Place',
+    name: e.location,
+    address: e.location,
+  },
+  organizer: {
+    '@type': 'Organization',
+    name: 'The Ledger',
+    url: 'https://theledger.online',
+  },
+}))
 // ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -214,11 +237,12 @@ export default function EventsPage() {
 
   return (
     <>
-    <Helmet>
-      <title>Events — Competitions, Workshops & Networking | The Ledger</title>
-      <meta name="description" content="Upcoming finance and economics competitions, workshops, podcasts, and networking events for student clubs in The Ledger's global network." />
-      <link rel="canonical" href="https://theledger.online/events" />
-    </Helmet>
+    <Seo
+      title="Finance Events & Workshops | The Ledger"
+      description="Upcoming finance and economics competitions, workshops, podcasts, and networking events for student clubs in The Ledger's global network."
+      path="/events"
+      jsonLd={eventsJsonLd}
+    />
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -328,7 +352,7 @@ export default function EventsPage() {
           </div>
 
           {/* Avant-garde heading */}
-          <div style={{ lineHeight: 0.88, marginBottom: '28px' }}>
+          <h1 style={{ lineHeight: 0.88, margin: '0 0 28px', fontWeight: 'inherit', fontSize: 'inherit' }}>
             <div
               className="ev-tune"
               style={{
@@ -372,7 +396,7 @@ export default function EventsPage() {
                 CONNECT.
               </span>
             </div>
-          </div>
+          </h1>
 
           {/* Body */}
           <div style={{ maxWidth: '420px', opacity: 0, animation: 'ev-word-in 0.6s ease 0.45s forwards' }}>

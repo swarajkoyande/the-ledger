@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { ArrowRight, MapPin, ChevronDown } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import BorderGlow from '../components/BorderGlow'
+import { Seo } from '../components/Seo'
 import * as d3 from 'd3'
 import * as topojson from 'topojson-client'
 
@@ -246,11 +246,20 @@ export default function ChaptersPage() {
 
   return (
     <>
-    <Helmet>
-      <title>Chapters — Student Finance Clubs Worldwide | The Ledger</title>
-      <meta name="description" content="Find The Ledger student finance and economics chapters in Tokyo, India, Madrid, Gold Coast, and more. Join a local chapter or start one at your school." />
-      <link rel="canonical" href="https://theledger.online/chapters" />
-    </Helmet>
+    <Seo
+      title="Chapters — Student Finance Clubs Worldwide | The Ledger"
+      description="Find The Ledger student finance and economics chapters in Tokyo, India, Madrid, Gold Coast, and more. Join a local chapter or start one at your school."
+      path="/chapters"
+      jsonLd={{
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        itemListElement: chapters.map((ch, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: `${ch.city}, ${ch.country}`,
+        })),
+      }}
+    />
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -360,7 +369,7 @@ export default function ChaptersPage() {
           </div>
 
           {/* Avant-garde heading */}
-          <div style={{ lineHeight: 0.88, marginBottom: '28px' }}>
+          <h1 style={{ lineHeight: 0.88, margin: '0 0 28px', fontWeight: 'inherit', fontSize: 'inherit' }}>
             <div
               className="ch-globe"
               style={{
@@ -404,7 +413,7 @@ export default function ChaptersPage() {
                 EXPAND.
               </span>
             </div>
-          </div>
+          </h1>
 
           {/* Body */}
           <div style={{ maxWidth: '420px', opacity: 0, animation: 'ch-word-in 0.6s ease 0.45s forwards' }}>
@@ -487,9 +496,9 @@ export default function ChaptersPage() {
               <p style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(249,115,22,0.65)', letterSpacing: '0.28em', textTransform: 'uppercase', marginBottom: '8px' }}>
                 [ GLOBAL_FOOTPRINT ]
               </p>
-              <h2 style={{ fontFamily: '"Futura","Century Gothic",sans-serif', fontSize: 'clamp(1.6rem,3vw,2.4rem)', fontWeight: 900, color: '#F5F0E8', letterSpacing: '-0.02em', marginBottom: '8px' }}>
+              <h1 style={{ fontFamily: '"Futura","Century Gothic",sans-serif', fontSize: 'clamp(1.6rem,3vw,2.4rem)', fontWeight: 900, color: '#F5F0E8', letterSpacing: '-0.02em', marginBottom: '8px' }}>
                 Where we are
-              </h2>
+              </h1>
               <p style={{ fontSize: '14px', color: '#6B5E50', fontWeight: 300, lineHeight: 1.7, maxWidth: '460px' }}>
                 Six chapters. Seven countries. One network — and the Western Hemisphere is next.
               </p>

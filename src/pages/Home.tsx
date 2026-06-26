@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
@@ -7,6 +6,7 @@ import { MarqueeStrip } from '../components/Marquee'
 import BorderGlow from '../components/BorderGlow'
 import { useInView } from '../hooks/useInView'
 import { useCountUp } from '../hooks/useCountUp'
+import { Seo } from '../components/Seo'
 // ── Background orbs for liquid glass hero ─────────────────────────────────────
 function HeroOrbs() {
   return (
@@ -208,11 +208,11 @@ const marqueeItems = [
 export default function Home() {
   return (
     <>
-    <Helmet>
-      <title>The Ledger — Student Finance & Economics Network</title>
-      <meta name="description" content="Free student-led finance and economics network across Tokyo, Singapore, Mumbai, Delhi, Gold Coast, and Madrid. Learn markets, pitch stocks, compete, and connect." />
-      <link rel="canonical" href="https://theledger.online/" />
-    </Helmet>
+    <Seo
+      title="The Ledger — Student Finance & Economics Network"
+      description="Free student-led finance & economics network across Tokyo, Singapore, Mumbai, Delhi, Gold Coast & Madrid. Learn markets, pitch stocks, compete."
+      path="/"
+    />
     <main>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center pt-[68px] overflow-hidden" style={{ background: '#0E0C09' }}>

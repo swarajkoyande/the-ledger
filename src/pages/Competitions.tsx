@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
+import { Seo } from '../components/Seo'
 import { ArrowRight, Lock } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
 import BorderGlow from '../components/BorderGlow'
@@ -280,11 +280,37 @@ export default function Competitions() {
 
   return (
     <>
-    <Helmet>
-      <title>Competitions — Stock Pitch & Economics Challenges | The Ledger</title>
-      <meta name="description" content="Compete in The Ledger's global student finance competitions: stock pitch championships, economics case studies, and academic debate tournaments." />
-      <link rel="canonical" href="https://theledger.online/competitions" />
-    </Helmet>
+    <Seo
+      title="Stock Pitch & Economics Competitions | The Ledger"
+      description="Compete in The Ledger's global student finance competitions: stock pitch championships, economics case studies, and academic debate tournaments."
+      path="/competitions"
+      jsonLd={[
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Event',
+          name: 'Ledger × NGYA Economics Debate Championship',
+          description: 'A 5-day virtual debate tournament built on real-world finance and economics motions — co-hosted with NGYA (Nihon Global Youth Association). No reports, no case packs. Every round is a live debate. Format escalates: 1v1 in prelims, 2v2 in semis, full team clash in the Grand Final.',
+          startDate: '2026-07-26',
+          endDate: '2026-07-31',
+          organizer: { '@type': 'Organization', name: 'The Ledger · NGYA' },
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Event',
+          name: 'Ledger × EconomiX Economics Case Competition',
+          description: "A two-phase academic competition co-hosted with EconomiX. Phase 1: teams submit a 2–3 page analytical essay on a real Japan economics case study, graded by The Ledger's proprietary AI system + human review panel. Phase 2: top teams compete head-to-head in a live in-person final — presenting policy proposals, fielding judge Q&A, and facing a rebuttal round. 4–6 weeks end-to-end.",
+          startDate: '2026-08-09',
+          organizer: { '@type': 'Organization', name: 'The Ledger · EconomiX' },
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Event',
+          name: `Ledger Trading Competition — ${tq.season} 2026`,
+          description: `The Ledger's flagship quarterly trading competition. Each participant starts with a virtual $100,000 portfolio and competes across stocks and crypto — with leverage available. Runs every quarter (Spring · Summer · Fall · Winter). Current session: ${tq.season} ${tq.window}.`,
+          organizer: { '@type': 'Organization', name: 'The Ledger Network' },
+        },
+      ]}
+    />
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -395,7 +421,7 @@ export default function Competitions() {
           </div>
 
           {/* Avant-garde heading */}
-          <div style={{ lineHeight: 0.88, marginBottom: '28px' }}>
+          <h1 style={{ lineHeight: 0.88, margin: '0 0 28px', fontWeight: 'inherit', fontSize: 'inherit' }}>
             <div
               className="cf-compete"
               style={{
@@ -439,7 +465,7 @@ export default function Competitions() {
                 WIN.
               </span>
             </div>
-          </div>
+          </h1>
 
           {/* Body + CTAs */}
           <div style={{ maxWidth: '420px', opacity: 0, animation: 'cf-word-in 0.6s ease 0.45s forwards' }}>

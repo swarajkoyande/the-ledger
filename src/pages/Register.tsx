@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { ArrowRight, Building2, Globe2, CheckCircle2, Loader2 } from 'lucide-react'
 import { FadeIn } from '../components/FadeIn'
+import { Seo } from '../components/Seo'
 
 type FV = Record<string, string>
 function useForm(init: FV) {
@@ -294,11 +294,11 @@ export default function RegisterPage() {
 
   return (
     <>
-    <Helmet>
-      <title>Register Your Club — Join The Ledger Network</title>
-      <meta name="description" content="Register your school finance or economics club with The Ledger. Connect with a global student network across Asia, Europe, and Australia — free to join." />
-      <link rel="canonical" href="https://theledger.online/register" />
-    </Helmet>
+    <Seo
+      title="Register Your Club — Join The Ledger Network"
+      description="Register your school finance or economics club with The Ledger. Connect with a global student network across Asia, Europe, and Australia — free to join."
+      path="/register"
+    />
     <main>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -408,7 +408,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Avant-garde heading */}
-          <div style={{ lineHeight: 0.88, marginBottom: '28px' }}>
+          <h1 style={{ lineHeight: 0.88, margin: '0 0 28px', fontWeight: 'inherit', fontSize: 'inherit' }}>
             <div
               className="rg-join"
               style={{
@@ -452,7 +452,7 @@ export default function RegisterPage() {
                 GROW.
               </span>
             </div>
-          </div>
+          </h1>
 
           {/* Body */}
           <div style={{ maxWidth: '420px', opacity: 0, animation: 'rg-word-in 0.6s ease 0.45s forwards' }}>
